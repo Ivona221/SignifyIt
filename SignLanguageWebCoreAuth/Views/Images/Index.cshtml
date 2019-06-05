@@ -1,0 +1,35 @@
+﻿@using SignLanguageWebCoreAuth.Models
+@model ImagesPageViewModel
+@{
+    ViewBag.Title = "Images";
+}
+<link href="@Url.Content("~/css/images.css")" rel="stylesheet" type="text/css" />
+
+<div class="sign-images">
+    <div class="user-input">
+        <h2 class="title-images">Текст во знаковен јазик</h2>
+        <textarea placeholder="Внеси текст..." name="insert-text" id="insert-text" cols="20" rows="10" value=""></textarea>
+        <input type="button" class="button transform-button" value="Претвори" name="transform" id="transform" />
+    </div>
+    <div class="processed-result">
+        <div class="slideshow-container"></div>
+    </div>
+</div>
+
+<!-- 
+
+
+<h2>Слики</h2>
+
+<div>
+    <span>Внеси текст</span>
+    <input type="text" value="" class="text-input" id="insert-text" required />
+
+	<div class="slideshow-container">
+	</div>
+	
+    <input type="button" class="btn btn-success" value="Претвори" name="transform" id="transform" />
+</div> -->
+
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="@Url.Content("~/js/transform.js")"></script>

@@ -1,0 +1,21 @@
+---
+  - block:
+
+    - name: Create folder 
+      file: dest={{temporary_folder}} state=directory
+
+    - name: pack
+      archive: path={{local_build}} dest={{local_build}}/publish.tar.bz2 format=tar.bz2
+
+    - name: extract package
+      unarchive: src={{local_build}}/publish.tar.bz2 dest={{temporary_folder}} copy=yes
+
+    - name: rename folder
+      shell: chdir={{approot}} mv publish publish_old && mv publish_new publish
+
+
+    - name: permissions
+      file: path={{approot}}/publish state=directory owner=netcore group=netcore recurse=yes
+
+        #    - name: restart service
+

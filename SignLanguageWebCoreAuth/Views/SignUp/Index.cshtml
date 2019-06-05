@@ -1,0 +1,38 @@
+﻿@using SignLanguageWebCoreAuth.Models
+@model SignUpPageViewModel
+@{
+    ViewBag.Title = "Sign Up";
+    Layout = "_Layout";
+}
+
+<link href="@Url.Content("~/css/signup.css")" rel="stylesheet" type="text/css" />
+
+<div class="login-page">
+    <div class="login-form-wrapper">
+        <div class="title-wrapper">
+            <h4>Најави се</h4>
+        </div>
+        <div class="form-wrapper">
+            <div>
+                <label for="username">Корисничко име</label>
+                <input type="text" value="" class="sing-up-input" id="username" required />
+            </div>
+            <div>
+                <label for="email">Email</label>
+                <input type="text" value="" class="sing-up-input" id="email" required />
+            </div>
+            <div>
+                <label for="password">Лозинка</label>
+                <input type="password" value="" class="sing-up-input" id="password" required />
+            </div>
+            <div>
+                <label for="verifyPassword">Потврди Лозинка</label>
+                <input type="verify-password" value="" class="sing-up-input" id="verifyPassword" required />
+            </div>
+            <input type="button" class="button" value="Најави се" name="signUp" id="signUp" />
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="@Url.Content("~/js/sign-up.js")"></script>

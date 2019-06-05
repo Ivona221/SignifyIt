@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Http
+@using SignLanguageWebCoreAuth.Models
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@* @using Microsoft.AspNetCore.Identity *@
+@model LoginPageViewModel
+@{
+    ViewBag.Title = "Login";
+}
+
+<link href="@Url.Content("~/css/login.css")" rel="stylesheet" type="text/css" />
+
+<div class="login-page">
+    <div class="login-form-wrapper">
+        <div class="title-wrapper">
+            <h4>Најави се</h4>
+        </div>
+        <div class="form-wrapper">
+            <div>
+                <label for="username">Корисничко име</label>
+                <input type="text" value="" class="sing-up-input" id="username" required />
+            </div>
+            <div>
+                <label for="password">Лозинка</label>
+                <input type="password" value="" class="sing-up-input" id="password" required />
+            </div>
+            <input type="button" class="button" value="Најави се" name="login" id="login" />
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="@Url.Content("~/js/login.js")"></script>

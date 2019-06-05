@@ -1,0 +1,95 @@
+﻿@using SignLanguageWebCoreAuth.Models
+@model SynonymsPageViewModel
+@{
+    ViewBag.Title = "Index";
+    //Layout = "_Layout";
+}
+
+<link href="@Url.Content("~/css/synonyms.css")" rel="stylesheet" type="text/css" />
+
+<div>
+
+    <!-- Modal -->
+    <div id="synonymsModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header title-wrapper">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Додади нов синоним</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="login-page">
+                        <div class="login-form-wrapper">
+                            <div class="form-wrapper">
+                                <div>
+                                    <label for="category">Категорија</label>
+                                    <select required id="category" name="category">
+                                        <option value="" disabled>Одбери категорија</option>
+                                        @foreach (var tag in Model.Tags)
+                                        {
+                                            <option value="@tag.Tag">@tag.Tag</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="phrase">Фраза</label>
+                                    <input required type="text" value="" name="phrase" id="phrase" />
+                                </div>
+                                <div>
+                                    <label for="synonym">Синоним</label>
+                                    <input required type="text" value="" id="synonym" name="synonym" />
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default close-modal" data-dismiss="modal">Затвори</button>
+                    <input type="button" class="button" value="Зачувај" name="saveSynonym" id="saveSynonym" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wrapper-div">
+        <span class="add-new-phrase-text">Додади нова фраза</span>
+        <a class="open-synonyms-modal">
+            <div class="col-sm-1">
+                <div class="glyphicon-ring glyphicon-teal">
+                    <span class="glyphicon glyphicon-plus glyphicon-bordered">+</span>
+                </div>
+            </div>
+        </a>
+    </div>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Фраза</th>
+                <th scope="col">Синоним</th>
+                <th scope="col">Област</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Synonyms.Count > 0 && Model.Synonyms != null)
+            {
+                foreach (var synonym in Model.Synonyms)
+                {
+                    <tr>
+                        <td>@synonym.Phrase</td>
+                        <td>@synonym.RelatedWord</td>
+                        <td>@synonym.Tag</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="~/js/bootstrap.min.js"></script>
+<script src="@Url.Content("~/js/synonyms.js")"></script>
+

@@ -1,0 +1,29 @@
+﻿@using SignLanguageWebCoreAuth.Models
+@model UploadImagesPageViewModel
+@{
+	ViewBag.Title = "Images";
+}
+<link href="@Url.Content("~/css/upload.css")" rel="stylesheet" type="text/css" />
+
+    <form method="post" enctype="multipart/form-data" asp-controller="Images" asp-action="Upload">
+        <div class="login-page">
+            <div class="login-form-wrapper">
+                <div class="title-wrapper">
+                    <h4>Додади слики</h4>
+                </div>
+                <div class="form-wrapper">
+                    <div>
+                        <label for="files">Слика</label>
+                        <input type="file" name="files">
+                    </div>
+                    <div>
+                        <label for="password">Значење</label>
+                        <input type="text" id="meaning" name="meaning" required>
+                    </div>
+                    <input type="submit" class="button" value="Додади">
+                </div>
+            </div>
+        </div>
+</form>
+        <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+        @* <script src="@Url.Content("~/js/upload.js")"></script> *@

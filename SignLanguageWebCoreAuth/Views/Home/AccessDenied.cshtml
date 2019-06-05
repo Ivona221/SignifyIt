@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewData["Title"] = "AccessDenied";
+}
+
+<link href="@Url.Content("~/css/accessdenied.css")" rel="stylesheet" type="text/css" />
+
+<div class="access-denied-box" style="width:800px; margin:0 auto;">
+    <div><img height="200" src="~/images/404.png" /></div>
+    
+</div>
+
+<div class="access-denied-box" style="width:800px; margin:0 auto;">
+    <div class="access-denied-text">Пристапот до оваа страна е забранет. Мора да се <a href="@Url.Action("Index", "Login")" class="button">најавите</a></div>
+</div>
+

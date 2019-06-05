@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<link href="@Url.Content("~/css/homepage.css")" rel="stylesheet" type="text/css" />
+<link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700&display=swap&subset=cyrillic" rel="stylesheet">
+
+<div class="homepage">
+	<div class="text-box">
+		<h2 class="title">Добредојдовте</h2>
+		<h4 class="description">Лорем ипсум е просто нешто за зафаќање на празно место и се повторува и се повтроува и се повторува. Лорем ипсум е просто нешто за зафаќање на празно место и се повторува и се повтроува и се повторува. Лорем ипсум е просто нешто за зафаќање на празно место.</h4>
+		<div class="page-buttons">
+			<a href="@Url.Action("Index", "Synonyms")" class="button">Додади Синоними</a>
+			<a href="@Url.Action("Index", "Images")" class="button">Текст во знаци</a>
+			<a href="@Url.Action("UploadIndex", "Images")" class="button">Додади фотографии</a>
+		</div>
+	</div>
+</div>
+
