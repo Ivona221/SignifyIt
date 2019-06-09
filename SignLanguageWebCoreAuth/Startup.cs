@@ -22,7 +22,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Logging;
 using SignLanguageSimplification.SimplificationAlgorithm;
 using SignLanguageWebCoreAuth.SimplificationAlgorithm;
-using Synonyms = SignLanguageSimplification.SimplificationAlgorithm.Synonyms;
+using SignLanguageWebCoreAuth.SimplificationAlgorithm.Interface;
+using SignLanguageSimplification.SimplificationAlgorithm.Implementation;
+using SignLanguageWebCoreAuth.SimplificationAlgorithm.Implementation;
 
 namespace SignLanguageWebCoreAuth
 {
@@ -91,8 +93,9 @@ namespace SignLanguageWebCoreAuth
             services.AddSingleton<IStopWordsRemoval, StopWordsRemoval>();
             services.AddSingleton<ITenseRecognition, TenseRecognition>();
             services.AddSingleton<ISentenceSubsplitting, SentenceSubSplitting>();
-            services.AddSingleton<ISynonyms, Synonyms>();
+            services.AddSingleton<ISynonyms, SignLanguageSimplification.SimplificationAlgorithm.Implementation.Synonyms>();
             services.AddSingleton<IPluralToSingular, PluralToSinular>();
+            services.AddSingleton<IPOSTagger, POSTagger>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

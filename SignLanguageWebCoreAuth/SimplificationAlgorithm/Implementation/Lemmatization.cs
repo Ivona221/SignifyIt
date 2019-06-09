@@ -5,9 +5,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using MongoDB.Driver;
+using SignLanguageWebCoreAuth.SimplificationAlgorithm.Interface;
 using SignLanguageWebCoreAuth.SimplificationAlgorithm.Models;
 
-namespace SignLanguageWebCoreAuth.SimplificationAlgorithm
+namespace SignLanguageWebCoreAuth.SimplificationAlgorithm.Implementation
 {
     class Lemmatization : ILemmatization
     {

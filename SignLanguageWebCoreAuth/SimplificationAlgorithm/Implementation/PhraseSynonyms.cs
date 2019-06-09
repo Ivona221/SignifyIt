@@ -6,9 +6,10 @@ using Aerospike.Client;
 using Microsoft.AspNetCore.Rewrite.Internal.UrlMatches;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
+using SignLanguageWebCoreAuth.SimplificationAlgorithm.Interface;
 using SignLanguageWebCoreAuth.SimplificationAlgorithm.Models;
 
-namespace SignLanguageWebCoreAuth.SimplificationAlgorithm
+namespace SignLanguageWebCoreAuth.SimplificationAlgorithm.Implementation
 {
     public class PhraseSynonyms : IPhraseSynonyms
     {

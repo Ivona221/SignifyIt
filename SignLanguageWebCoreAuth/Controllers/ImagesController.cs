@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SignLanguageSimplification.SimplificationAlgorithm;
 using SignLanguageWebCoreAuth.SimplificationAlgorithm;
+using SignLanguageWebCoreAuth.SimplificationAlgorithm.Interface;
 
 namespace SignLanguageWebCoreAuth.Controllers
 {
@@ -28,11 +29,12 @@ namespace SignLanguageWebCoreAuth.Controllers
         private ISentenceSplitting sentenceSplitting;
         private ISentenceSubsplitting sentenceSubsplitting;
         private IPhraseSynonyms phraseSynonyms;
+        private IPOSTagger posTagger;
         private readonly ILogger _logger;
 
         public ImagesController(IHostingEnvironment hostingEnvironment, IConfiguration _configuration, ITenseRecognition _tenseRecognition,
             IStopWordsRemoval _stopWordsRemoval, IInfinitive _infinitive, IPluralToSingular _pluralToSingular,
-            ISentenceSplitting _sentenceSplitting, ISentenceSubsplitting _sentenceSubsplitting, IPhraseSynonyms _phraseSynonyms,
+            ISentenceSplitting _sentenceSplitting, ISentenceSubsplitting _sentenceSubsplitting, IPhraseSynonyms _phraseSynonyms, IPOSTagger _posTagger,
             ILogger<ImagesController> logger)
         {
             _hostingEnvironment = hostingEnvironment;
@@ -44,6 +46,7 @@ namespace SignLanguageWebCoreAuth.Controllers
             sentenceSplitting = _sentenceSplitting;
             sentenceSubsplitting = _sentenceSubsplitting;
             phraseSynonyms = _phraseSynonyms;
+            posTagger = _posTagger;
             _logger = logger;
         }
 
@@ -260,7 +263,8 @@ namespace SignLanguageWebCoreAuth.Controllers
             Dictionary<string, string> infinitive = this.infinitive.TurnVerbsToInfinitive(taggedSents);
             Dictionary<string, string> singular = pluralToSingular.ConvertToSinular(infinitive);
             Dictionary<string, string> stopwordsRemoved = stopWordsRemoval.RemoveStopWords(singular);
-            Dictionary<string, string> synonyms = phraseSynonyms.MapPhraseSynonyms(stopwordsRemoved);
+            Dictionary<string, string> pos = posTagger.PosTag(stopwordsRemoved);
+            Dictionary<string, string> synonyms = phraseSynonyms.MapPhraseSynonyms(pos);
             //Dictionary<List<KeyValuePair<string, List<string>>>, string> synonyms = SignLanguageSimplification.SimplificationAlgorithm.Synonyms.FindSynonyms(singular);
 
             return synonyms;

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SignLanguageWebCoreAuth.SimplificationAlgorithm;
+using SignLanguageWebCoreAuth.SimplificationAlgorithm.Interface;
 
-namespace SignLanguageSimplification.SimplificationAlgorithm
+namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
 {
     class SentenceSplitting : ISentenceSplitting
     {

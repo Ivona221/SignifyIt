@@ -71,10 +71,4 @@
     </Content>
   </ItemGroup>
 
-
-  <ItemGroup>
-    <Folder Include="SimplificationAlgorithm\Interface\" />
-    <Folder Include="SimplificationAlgorithm\Implementation\" />
-  </ItemGroup>
-
 </Project>

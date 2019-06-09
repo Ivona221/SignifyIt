@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using SignLanguageWebCoreAuth.SimplificationAlgorithm;
+using SignLanguageWebCoreAuth.SimplificationAlgorithm.Interface;
 
-namespace SignLanguageSimplification.SimplificationAlgorithm
+namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
 {
     class TenseRecognition : ITenseRecognition
     {

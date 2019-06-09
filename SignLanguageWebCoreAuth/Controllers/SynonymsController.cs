@@ -1,22 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using SignLanguageWebCore;
 using SignLanguageWebCoreAuth.Data;
 using SignLanguageWebCoreAuth.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Http;
 using Aerospike.Client;
 using Microsoft.Extensions.Configuration;
-using SignLanguageSimplification.SimplificationAlgorithm;
 using Synonyms = SignLanguageWebCoreAuth.Models.Synonyms;
 using MongoDB.Driver;
-using SignLanguageWebCoreAuth.SimplificationAlgorithm;
 using SignLanguageWebCoreAuth.SimplificationAlgorithm.Models;
+using SignLanguageWebCoreAuth.SimplificationAlgorithm.Interface;
 
 namespace SignLanguageWebCoreAuth.Controllers
 {
@@ -29,15 +25,17 @@ namespace SignLanguageWebCoreAuth.Controllers
         private IStopWordsRemoval stopWordsRemoval;
         private IInfinitive infinitive;
         private IPluralToSingular pluralToSingular;
+        private IPOSTagger posTagger;
 
         public SynonymsController(IConfiguration _configuration, ITenseRecognition _tenseRecognition,
-            IStopWordsRemoval _stopWordsRemoval, IInfinitive _infinitive, IPluralToSingular _pluralToSingular)
+            IStopWordsRemoval _stopWordsRemoval, IInfinitive _infinitive, IPluralToSingular _pluralToSingular, IPOSTagger _posTagger)
         {
             configuration = _configuration;
             tenseRecognition = _tenseRecognition;
             stopWordsRemoval = _stopWordsRemoval;
             infinitive = _infinitive;
             pluralToSingular = _pluralToSingular;
+            posTagger = _posTagger;
         }
 
         // GET: Synonyms
@@ -129,6 +127,7 @@ namespace SignLanguageWebCoreAuth.Controllers
             Dictionary<string, string> stopwordsRemoved = stopWordsRemoval.RemoveStopWords(taggedSents);
             Dictionary<string, string> infinitive = this.infinitive.TurnVerbsToInfinitive(stopwordsRemoved);
             Dictionary<string, string> singular = pluralToSingular.ConvertToSinular(infinitive);
+            Dictionary<string, string> pos = posTagger.PosTag(singular);
 
             return singular.First().Key;
         }

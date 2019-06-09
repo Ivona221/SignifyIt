@@ -12,8 +12,9 @@ using Aerospike.Client;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using SignLanguageWebCoreAuth.SimplificationAlgorithm;
+using SignLanguageWebCoreAuth.SimplificationAlgorithm.Interface;
 
-namespace SignLanguageSimplification.SimplificationAlgorithm
+namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
 {
     class Infinitive : IInfinitive
     {

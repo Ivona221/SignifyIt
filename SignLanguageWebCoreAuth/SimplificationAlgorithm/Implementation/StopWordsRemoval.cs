@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SignLanguageWebCoreAuth.SimplificationAlgorithm;
+using SignLanguageWebCoreAuth.SimplificationAlgorithm.Interface;
 
-namespace SignLanguageSimplification.SimplificationAlgorithm
+namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
 {
     class StopWordsRemoval : IStopWordsRemoval
     {
@@ -17,33 +18,33 @@ namespace SignLanguageSimplification.SimplificationAlgorithm
 
             var predlozi = new[]
             {
-                "без", "во", "в", "врз", "до", "за",
-                "зад", "заради", "искрај", "крај", "кај", "каде",
+                "врз","за",
+                "зад", "заради", "кај",
                 "како", "кон", "крај", "меѓу", "место", "на", "над",
                 "накај", "накрај", "наместо", "наспроти", "насред",
-                "низ", "од", "одавде", "оданде", "отаде", "околу",
+                "низ", "одавде", "оданде", "отаде", "околу",
                 "освен", "откај", "по", "под", "покрај", "помеѓу",
                 "поради", "посред", "потем", "пред", "през",
                 "преку", "при", "против", "среде", "сред",
-                "според", "спроти", "спротив", "спрема", "со", "сосе", "у"
+                "според", "со", "сосе", "у"
             };
 
             var svrznici = new[]
             {
-                "и", "а" , "но", "ама", "или", "да",
+                "и", "а" , "но", "ама","да",
                 "за да" , "макар што", "поради тоа што",
                 "и", "ни", "ниту", "па", "та", "не само што" , "туку и",
                 "а", "но", "ама", "туку", "ами", "меѓутоа",
-                "само", "само што", "освен што", "единствено",
-                "кога", "штом", "штотуку", "тукушто", "откако", "откога", "пред да", "дури", "додека",
-                "затоа што", "зашто", "бидејќи", "дека", "оти",
+                "само", "само што", "освен што", "единствено"
+                , "штом", "штотуку", "тукушто", "откако", "откога", "пред да", "дури", "додека",
+                "затоа што", "бидејќи", "дека", "оти",
                 "така што", "толку што", "такви што", "така што",
                 "да", "за да",
-                "ако", "да", "без да", "ли",
+                "да", "ли",
                 "иако", "макар што", "и покрај тоа што", "и да",
                 "така како што", "како да", "како божем",
-                "што", "кој што", "којшто", "чиј", "чијшто", "каков што", "колкав што",
-                "дека", "оти", "како", "што", "да", "дали", "кој", "чиј", "кога"
+                "што", "чиј", "чијшто", "каков што", "колкав што",
+                "дека", "оти", "како", "што", "да", "дали", "чиј"
             };
 
             var zamenki = new[]
@@ -86,8 +87,28 @@ namespace SignLanguageSimplification.SimplificationAlgorithm
                             w = w.Replace(rc, ' ');
                             w = w.Trim();
                         }
+                    }                   
+                    if(w == "спротив" || w == "спроти" || w == "наспроти")
+                    {                                               
+                      sentenceBuffer[i] = "спротивно" + " ";                       
                     }
-                    if (!predlozi.Contains(w.ToLower()) && !chestici.Contains(w.ToLower()) && !zamenki.Contains(w.ToLower()) && 
+                    else if (w == "среде" || w == "насреде" || w == "насред" || w == "сред")
+                    {
+                        sentenceBuffer[i] = "средина" + " ";
+                    }
+                    else if (w == "покрај")
+                    {
+                        sentenceBuffer[i] = "до" + " ";
+                    }
+                    else if (w == "но" || w == "меѓутоа")
+                    {
+                        sentenceBuffer[i] = "до" + " ";
+                    }
+                    else if (w == "којшто" || w == "коишто")
+                    {
+                        sentenceBuffer[i] = "кој" + " ";
+                    }
+                    else if (!predlozi.Contains(w.ToLower()) && !chestici.Contains(w.ToLower()) && !zamenki.Contains(w.ToLower()) &&
                         !svrznici.Contains(w.ToLower()) && !verbs.Contains(w.ToLower()))
                     {
                         sentenceBuffer[i] = w + " ";

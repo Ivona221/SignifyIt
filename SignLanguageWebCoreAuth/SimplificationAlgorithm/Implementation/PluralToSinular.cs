@@ -1,5 +1,4 @@
-﻿using HtmlAgilityPack;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using SignLanguageWebCoreAuth.SimplificationAlgorithm.Models;
 using System;
 using System.Collections.Generic;
@@ -9,34 +8,25 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Aerospike.Client;
 using Microsoft.Extensions.Configuration;
-using MongoDB.Bson;
-using Newtonsoft.Json.Linq;
 using SignLanguageWebCoreAuth.SimplificationAlgorithm;
+using SignLanguageWebCoreAuth.SimplificationAlgorithm.Interface;
 
-namespace SignLanguageSimplification.SimplificationAlgorithm
+namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
 {
-    class Synonyms : ISynonyms
+    class PluralToSinular : IPluralToSingular
     {
-        private readonly IConfiguration configuration;
+        private IConfiguration configuration;
 
-        public Synonyms(IConfiguration _configuration)
+        public PluralToSinular(IConfiguration _configuration)
         {
             configuration = _configuration;
         }
 
-        public Dictionary<List<KeyValuePair<string, List<string>>>, string> FindSynonyms(Dictionary<string, string> subsentences)
+        public Dictionary<string,string> ConvertToSinular(Dictionary<string, string> subsentences)
         {
             HtmlAgilityPack.HtmlWeb web = new HtmlAgilityPack.HtmlWeb();
 
-            //var _client = new MongoClient();
-            //var _database = _client.GetDatabase("SignLanguage");
-
-            //string sentences = System.IO.File.ReadAllText(@"D:\C#Projects\SignLanguageSimplification\pluralNouns3.txt");
-            //var words = sentences.Split(' ');
-
             var removeChars = new[] { '.', ',', '!', '?', ')', '(', '[', ']', '{', '}', '"', '`', '+', '-', '“', '”', '‘', '“', ';', '„', ':', '/', '\\' };
-
-            //var subsentences = sentences.Split('\n');
 
             var predlozi = new[]
             {
@@ -146,27 +136,65 @@ namespace SignLanguageSimplification.SimplificationAlgorithm
                  "на секој начин", "односно"
             };
 
-            Dictionary<List<KeyValuePair<string, List<string>>>, string> synonymsDict = new Dictionary<List<KeyValuePair<string, List<string>>>, string>();
+            var regexForVerbLForm1 = @"\w*л\b";
+            var regexForVerbLForm2 = @"\w*ла\b";
+            var regexForVerbLForm3 = @"\w*ле\b";
+
+            var regexForVerbNoun1 = @"\w*ние\b";
+            var regexForVerbNoun2 = @"\w*ње\b";
+
+            var regexForCollectiveNouns1 = @"\w*иште\b";
+            var regexForCollectiveNouns2 = @"\w*ишта\b";
+
+            var regexForPlural1 = @"\w*ови\b";
+            var regexForPlural2 = @"\w*еви\b";
+            var regexForPlural3 = @"\w*вци\b";
+            var regexForPlural4 = @"\w*иња\b";
+            var regexForPlural5 = @"\w*и\b";
+
+            var regexForChlenuvanje = @"\w*от|ов|он|та|ва|на|то|во|но|те|ве|не\b";
+
+            var regexForVerbSegashno1 = @"\w*ам\b";
+            var regexForVerbSegashno2 = @"\w*еш\b";
+
+            var regexForVerbSegashno3 = @"\w*еме\b";
+            var regexForVerbSegashno4 = @"\w*ете\b";
+            var regexForVerbSegashno5 = @"\w*ат\b";
+
+            var regexForVerbsPlural = @"\w*вме|вте\b";
+
+            Dictionary<string, string> pluralSing = new Dictionary<string, string>();
             foreach (KeyValuePair<string, string> entry in subsentences)
             {
-                
+                //var sentensePlusTense = subSent.Split(new string[] { "---->" }, StringSplitOptions.None);
+
                 var sentencePart = entry.Key;
                 var tensePart = entry.Value;
 
+                //if (sentencePart.Trim() == "")
+                //{
+                //    return;
+                //}
+                //var tensePart = "";
+                //if(sentensePlusTense.Length > 1)
+                //{
+                //    tensePart = sentensePlusTense[1];
+                //}
+                
                 var words = sentencePart.Split(' ');
-                words = words.Where(x => x != "").ToArray();
-                string[] sentenceBuffer = new string[words.Length + 1];
-                List<KeyValuePair<string, List<string>>> wordsDict = new List<KeyValuePair<string, List<string>>>();
-                //Dictionary<string, List<string>> a = new Dictionary<string, List<string>>();
 
-                //Lookup<string, List<string>> wordsDict = (Lookup<string, List<string>>)a.ToLookup(p => p.Key, p => p.Value);
-                //Lookup<string, List<string>> wordsDict = new Lookup<string, List<string>>;
+                string[] sentenceBuffer = new string[words.Length+1];
+                words = words.Where(x => x != "").ToArray();
                 for (int i = 0; i < words.Length; i++)
                 {
-                    
-                    List<string> syns = new List<string>();
                     var w = words[i];
-
+                    foreach (var rc in removeChars)
+                    {
+                        if (w.Trim() != rc.ToString())
+                        {
+                            w = w.Replace(rc, ' ');
+                        }
+                    }
 
                     string current = w;
                     if (current != "" && current != null)
@@ -176,59 +204,139 @@ namespace SignLanguageSimplification.SimplificationAlgorithm
                         string next = PeekNext(sentenceBuffer, i);
                         string nextToNext = PeekNext(sentenceBuffer, i + 1);
 
+
+                        MatchCollection glagolskiImenki1 = Regex.Matches(current, regexForVerbNoun1);
+                        MatchCollection glagolskiImenki2 = Regex.Matches(current, regexForVerbNoun2);
+                        MatchCollection collectiveNouns1 = Regex.Matches(current, regexForCollectiveNouns1);
+                        MatchCollection collectiveNouns2 = Regex.Matches(current, regexForCollectiveNouns2);
+                        MatchCollection chlenvanje = Regex.Matches(current, regexForChlenuvanje);
+                        MatchCollection plural1 = Regex.Matches(current, regexForPlural1);
+                        MatchCollection plural2 = Regex.Matches(current, regexForPlural2);
+                        MatchCollection plural3 = Regex.Matches(current, regexForPlural3);
+                        MatchCollection plural4 = Regex.Matches(current, regexForPlural4);
+                        MatchCollection plural5 = Regex.Matches(current, regexForPlural5);
+                        MatchCollection glagolSegashno1 = Regex.Matches(current, regexForVerbSegashno1);
+                        MatchCollection glagolSegashno2 = Regex.Matches(current, regexForVerbSegashno2);
+                        MatchCollection glagolSegashno3 = Regex.Matches(current, regexForVerbSegashno3);
+                        MatchCollection glagolSegashno4 = Regex.Matches(current, regexForVerbSegashno4);
+                        MatchCollection glagolSegashno5 = Regex.Matches(current, regexForVerbSegashno5);
+                        MatchCollection glagoli = Regex.Matches(current, regexForVerbsPlural);
+
                         var currentFlag = false;
-                        if (!predlozi.Contains(current) && !predloziImenki.Contains(current) && !prilozi.Contains(current)
-                            && !chestici.Contains(current) && !zamenki.Contains(current) && !svrznici.Contains(current)
-                            && !modalniZborovi.Contains(current) && !zamenkiGlagol.Contains(current))
+                        if (char.IsUpper(current[0]))
                         {
-                            var synonyms = WriteToDB(current);
-                            if (synonyms != null && synonyms.Count > 0)
+                            sentenceBuffer[i] = current;
+                        }
+                        else if (predlozi.Contains(current) || prilozi.Contains(current) || zamenki.Contains(current) ||
+                            chestici.Contains(current) ||
+                            modalniZborovi.Contains(current) || svrznici.Contains(current))
+                        {
+                            sentenceBuffer[i] = current;
+                        }
+                        else if (collectiveNouns1.Count == 1 || collectiveNouns2.Count == 1)
+                        {
+                            var word = WriteToDB(current);
+                            if (word != null)
                             {
-                                //sentenceBuffer[i] = current + " ( ";
                                 currentFlag = true;
-                                foreach (var synonym in synonyms)
-                                {
-                                    syns.Add(synonym);
-                                    //sentenceBuffer[i] += synonym + " , ";
-                                }
-                                //sentenceBuffer[i].TrimEnd();
-                                //sentenceBuffer[i].TrimEnd(',');
-                                //sentenceBuffer[i] += " )";
+                                sentenceBuffer[i] = word + " ";
                             }
-                            else
+
+                        }
+
+                        else if (chlenvanje.Count >= 1)
+                        {
+                            var word = WriteToDB(current);
+                            if (word != null)
                             {
-                                syns = null;
-                                //sentenceBuffer[i] = current;
+                                currentFlag = true;
+                                sentenceBuffer[i] = word + " ";
+                            }
+
+                        }
+
+                        else if (plural1.Count >= 1 || plural2.Count >= 1 || plural3.Count >= 1 || plural4.Count >= 1)
+                        {
+                            var word = WriteToDB(current);
+                            if (word != null)
+                            {
+                                currentFlag = true;
+                                sentenceBuffer[i] = word + " ";
+                            }
+
+                        }
+                        else if ((glagolSegashno1.Count < 1 && glagolSegashno2.Count < 1 && glagolSegashno3.Count < 1 && glagolSegashno3.Count < 1
+                            && glagolSegashno4.Count < 1 && glagolSegashno5.Count < 1 && glagoli.Count < 1) && plural5.Count > 1)
+                        {
+                            var word = WriteToDB(next);
+                            if (word != null)
+                            {
+                                currentFlag = true;
+                                sentenceBuffer[i + 1] = word + " ";
                             }
 
                         }
 
                         if (!currentFlag)
                         {
-                            syns = null;
-                            //sentenceBuffer[i] = w;
+                            sentenceBuffer[i] = w;
+                        }
+
+                        var nextFlag = false;
+                        if (next != null)
+                        {
+                            MatchCollection matches1 = Regex.Matches(next, regexForVerbLForm1);
+                            MatchCollection matches2 = Regex.Matches(next, regexForVerbLForm2);
+                            MatchCollection matches3 = Regex.Matches(next, regexForVerbLForm3);
+
+                            if (predloziImenki.Contains(current) && !predlozi.Contains(next)
+                                && !prilozi.Contains(next) && chestici.Contains(next)
+                                && !zamenki.Contains(next) && !svrznici.Contains(next) && !modalniZborovi.Contains(next))
+                            {
+                                if (char.IsUpper(next[0]))
+                                {
+                                    sentenceBuffer[i] = next;
+                                    //continue;
+                                }
+                                else
+                                {
+                                    var word = WriteToDB(next);
+                                    if (word != null)
+                                    {
+                                        currentFlag = true;
+                                        sentenceBuffer[i + 1] = word + " ";
+                                    }
+                                }                               
+                            }
+                        }
+
+                        if (nextFlag)
+                        {
+                            i++;
                         }
                     }
-                    if (current.Trim() == "")
-                        continue;
-                    wordsDict.Add(new KeyValuePair<string, List<string>>(w, syns));
+
                 }
-                //wordsDict = wordsDict.ToLookup(kvp => kvp.Key, kvp => kvp.Value);
-                synonymsDict.Add(wordsDict, tensePart);
+
+                var sent = string.Join(" ", sentenceBuffer);
+                sent = sent.Replace("   ", " ");
+                sent = sent.Replace("  ", " ");
+                pluralSing.Add(sent, tensePart);
+                //sentenceBuffer[words.Length] = "---->" + tensePart + '\n';
+                //using (System.IO.StreamWriter file =
+                //new System.IO.StreamWriter(@"D:\C#Projects\SignLanguageSimplification\pluralNouns3.txt", true))
+                //{
+                //    foreach (var word in sentenceBuffer)
+                //    {
+                //        file.Write(word + " ");
+                //    }
+
+                //}
+
             }
 
-
-            return synonymsDict;
+            return pluralSing;
             
-            //using (System.IO.StreamWriter file =
-            //new System.IO.StreamWriter(c@"D:\C#Projects\SignLanguageSimplification\synonyms3.txt", true))
-            //{
-            //    foreach (var word in sentenceBuffer)
-            //    {
-            //        file.Write(word + " ");
-            //    }
-
-            //}
         }
 
         private string PeekNext(string[] content, int index)
@@ -265,119 +373,62 @@ namespace SignLanguageSimplification.SimplificationAlgorithm
                 return false;
             }
         }
-        private List<string> WriteToDB(string word)
+
+        private string WriteToDB(string word)
         {
             HtmlAgilityPack.HtmlWeb web = new HtmlAgilityPack.HtmlWeb();
-
-//            var _client = new MongoClient();
-//            var _database = _client.GetDatabase("SignLanguage");
-//            var _collection = _database.GetCollection<SynonymsModel>("Synonyms");
-
+            //            var _client = new MongoClient();
+            //            var _database = _client.GetDatabase("SignLanguage");
+            //            var _collection = _database.GetCollection<PluralModel>("Plural");
+            //            if (_collection.Find(x => x.Plural == word.Trim()).Count() > 0)
+            //            {
+            //                return _collection.Find(x => x.Plural == word).FirstOrDefault().Singular.Trim();
+            //            }
             AerospikeClient client = new AerospikeClient(configuration["AppSettings:AerospikeClient"], 3000);
+            //var _client = new MongoClient();
+            //var _database = _client.GetDatabase("SignLanguage");
             Policy policy = new Policy();
-            List<string> synonyms = new List<string>();
-            Key key = new Key("sign-language", "Synonyms", word);
+            Key key = new Key("sign-language", "Plural", word);
             Record record = client.Get(policy, key);
-            ScanPolicy policyScan = new ScanPolicy();
             if (record != null)
             {
                 foreach (KeyValuePair<string, object> entry in record.bins)
                 {
-                    var syns = "";
-                    if (entry.Key == "Synonyms")
+                    if (entry.Key == "Singular")
                     {
-                        syns = entry.Value.ToString();
+                        return entry.Value.ToString();
                     }
-
-                    synonyms = syns.Split(",").ToList();
-                    return synonyms;
                 }
 
             }
-            //client.ScanAll(policyScan, "sign-language", "Synonyms", ScanCallback);
-
-
-            //var node = new Uri("http://192.168.0.36:9200");
-
-            //var settings = new ConnectionSettings(
-            //    node
-            //).DefaultIndex("synonyms");
-
-            //var client = new ElasticClient(settings);
-
-            List<string> links = new List<string>();
-            List<string> articleTexts = new List<string>();
-
-            
-            //var searchResponse = client.Search<SynonymsModel>(s => s
-            //   .From(0)
-            //   .Size(10)
-            //   .Query(q => q
-            //        .Match(m => m
-            //           .Field(f => f.Word)
-            //           .Query(word)
-            //        )
-            //   )
-            //);
-            //var synonymES = searchResponse.Documents.ToList();
-            //if (synonymES.Count > 0)
-            //{
-
-            //    foreach (var synonym in synonymES)
-            //    {
-            //        synonyms.Add(synonym.Synonym);
-            //    }
-            //    return synonyms;
-            //}
-            List<string> synonymsList = new List<string>();
-//            if (_collection.Find(x => x.Word == word.Trim()).Count() > 0)
-//            {
-//                foreach(var syn in _collection.Find(x => x.Word == word.Trim()).ToList())
-//                {
-//                    synonymsList.Add(syn.Synonym);
-//                }
-//                return synonymsList;
-//            }
-            
-            HtmlAgilityPack.HtmlDocument doc = web.Load("http://www.makedonski.info/synonyms/show/"+word);
-            Regex regex = new Regex("(synonyms/show)", RegexOptions.IgnoreCase);
-            var synsA = doc.DocumentNode.SelectNodes(".//a");
-            if(synsA != null)
+            HtmlAgilityPack.HtmlDocument doc = web.Load("http://www.makedonski.info/search/" + word);
+            var h2 = doc.DocumentNode.SelectNodes("//h2[@class='lexem']");
+            if (h2 != null)
             {
-                var regexMatch = synsA.Where(a => regex.IsMatch(a.Attributes["href"].Value)).ToList<HtmlNode>();
-                var synsString = "";
-                for (var i = 1; i < regexMatch.Count; i++)
+                var spanText = h2.Descendants("span").First()?.InnerText;
+                if (spanText != null)
                 {
-                    var a = regexMatch[i];
-                    var syn = a.InnerText.Split('(')[0];
-                    SynonymsModel plural = new SynonymsModel()
+                    PluralModel plural = new PluralModel()
                     {
-                        Word = word,
-                        Synonym = syn
+                        Plural = word,
+                        Singular = spanText
                     };
-
-                    //var indexResponse = client.IndexDocument(plural);
+                    WritePolicy policyWrite = new WritePolicy();
+                    policy.SetTimeout(50);  // 50 millisecond timeout.
+                    Key keyWrite = new Key("sign-language", "Plural", word);
+                    Bin binVerb = new Bin("Plural", plural.Plural);
+                    Bin binInf = new Bin("Singular", plural.Singular);
+                    client.Put(policyWrite, keyWrite, binVerb, binInf);
                     //_collection.InsertOne(plural);
-                    synsString += syn;
-                    if (i != regexMatch.Count - 1)
-                    {
-                        synsString += ",";
-                    }
-                    synonyms.Add(syn);
+                    return spanText + " ";
                 }
-                WritePolicy policyWrite = new WritePolicy();
-                policy.SetTimeout(50);  // 50 millisecond timeout.
-                Key keyWrite = new Key("sign-language", "Synonyms", word);
-                Bin binVerb = new Bin("Word", word);
-                Bin binInf = new Bin("Synonym", synsString);
-                client.Put(policyWrite, keyWrite, binVerb, binInf);
-                return synonyms;
+
             }
+
             return null;
         }
-
-      
     }
-
+    
 }
+
 

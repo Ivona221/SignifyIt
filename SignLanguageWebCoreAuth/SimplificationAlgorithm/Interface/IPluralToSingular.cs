@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SignLanguageWebCoreAuth.SimplificationAlgorithm
+namespace SignLanguageWebCoreAuth.SimplificationAlgorithm.Interface
 {
     public interface IPluralToSingular
     {
