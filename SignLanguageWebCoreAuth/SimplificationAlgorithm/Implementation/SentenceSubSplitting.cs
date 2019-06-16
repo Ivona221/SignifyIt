@@ -29,7 +29,10 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                 {
 
                     var words = splited[i].Split(' ');
+
                     words = words.Where(x => x != "").ToArray();
+                    if (words.Length == 0)
+                        continue;
                     if (words.Length >= 2)
                     {
                         sentenceArray.Add(splited[i]);

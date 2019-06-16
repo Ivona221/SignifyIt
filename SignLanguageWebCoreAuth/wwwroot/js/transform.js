@@ -42,6 +42,45 @@
         });
     });
 
+    $("#upload_image").click(function () {
+        var formData = new FormData();
+        var file = document.getElementById("image_recognition_file").files[0];
+        formData.append("fileImage", file);
+        $.ajax({
+            type: "POST",
+            url: '/Images/TransformFromImage',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false
+        }).done(function (res) {
+            console.log(res.images);
+            $(".slideshow-container").html("");
+            //var redirectUrl = res.redirectUrl;
+            //window.location.href = redirectUrl;
+            if (res.images != null) {
+                if (res.images.length == 1) {
+                    image = res.images[0].image;
+                    $(".slideshow-container").append(
+                        '<img src="' + image + '" style="width:100%"><div class="image-meaning">' + res.images[0].meaning + '</div>'
+                    );
+                    Notifications().hideLoading();
+                } else {
+                    for (var image in res.images) {
+                        var imageName = res.images[image].image;
+
+                        $(".slideshow-container").append(
+                            '<div class="mySlides"> <img src="' + imageName + '" style="width:100%"> <div class="image-meaning">' + res.images[image].meaning + '</div></div>'
+                        );
+                    }
+                    Notifications().hideLoading();
+                    showSlides();
+                }
+            }
+        });
+    });
+
+
     function showSlides() {
 	    var i;
 	    var slides = document.getElementsByClassName("mySlides");

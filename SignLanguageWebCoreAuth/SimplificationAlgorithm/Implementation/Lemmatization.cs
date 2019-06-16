@@ -194,7 +194,11 @@ namespace SignLanguageWebCoreAuth.SimplificationAlgorithm.Implementation
                 var sent = string.Join(" ", sentenceBuffer);
                 sent = sent.Replace("   ", " ");
                 sent = sent.Replace("  ", " ");
-                lemmatized.Add(sent, tensePart);
+                if (!lemmatized.ContainsKey(sent))
+                {
+                    lemmatized.Add(sent, tensePart);
+                }
+                
 
             }
 

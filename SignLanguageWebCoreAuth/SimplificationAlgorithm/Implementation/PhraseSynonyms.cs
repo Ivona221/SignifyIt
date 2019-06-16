@@ -123,7 +123,11 @@ namespace SignLanguageWebCoreAuth.SimplificationAlgorithm.Implementation
                 
                 var sent = sentencePart.Replace("   ", " ");
                 sent = sent.Replace("  ", " ");
-                synonymsFound.Add(sent, tensePart);
+                if (!synonymsFound.ContainsKey(sent))
+                {
+                    synonymsFound.Add(sent, tensePart);
+                }
+                
                 //using (System.IO.StreamWriter file =
                 //new System.IO.StreamWriter(@"D:\C#Projects\SignLanguageSimplification\extractedPredlozi3.txt", true))
                 //{

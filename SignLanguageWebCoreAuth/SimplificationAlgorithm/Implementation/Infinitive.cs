@@ -447,8 +447,10 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                 var sent = string.Join(" ", sentenceBuffer);
                 sent = sent.Replace("   ", " ");
                 sent = sent.Replace("  ", " ");
-                infinitive.Add(sent, tensePart);
-
+                if (!infinitive.ContainsKey(sent))
+                {
+                    infinitive.Add(sent, tensePart);
+                }    
             }
 
             return infinitive;

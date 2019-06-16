@@ -52,7 +52,10 @@ namespace SignLanguageWebCoreAuth.SimplificationAlgorithm.Implementation
                 var sent = string.Join(" ", sentenceBuffer);
                 sent = sent.Replace("   ", " ");
                 sent = sent.Replace("  ", " ");
-                pos.Add(sent, tensePart);
+                if (!pos.ContainsKey(sent))
+                {
+                    pos.Add(sent, tensePart);
+                }             
             }
 
             return pos;
@@ -64,7 +67,15 @@ namespace SignLanguageWebCoreAuth.SimplificationAlgorithm.Implementation
 
             AerospikeClient client = new AerospikeClient("192.168.0.39", 3000);
             word = word.Trim().ToLower();
-
+            word = word.Replace("j", "ј");
+            if(word == "уши")
+            {
+                word = "уво";
+            }
+            if (word == "големи")
+            {
+                word = "голем";
+            }
             var posKey = new Key("sign-language", "POS", word);
             var posRecord = client.Get(null, posKey);
             if (posRecord != null)

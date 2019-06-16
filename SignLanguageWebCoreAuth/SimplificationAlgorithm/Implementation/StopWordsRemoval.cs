@@ -119,7 +119,11 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                 var sent = string.Join(" ", sentenceBuffer);
                 sent = sent.Replace("   ", " ");
                 sent = sent.Replace("  ", " ");
-                stopWordsRemoved.Add(sent, tensePart);
+                if (!stopWordsRemoved.ContainsKey(sent))
+                {
+                    stopWordsRemoved.Add(sent, tensePart);
+                }
+                
                 //using (System.IO.StreamWriter file =
                 //new System.IO.StreamWriter(@"D:\C#Projects\SignLanguageSimplification\extractedPredlozi3.txt", true))
                 //{

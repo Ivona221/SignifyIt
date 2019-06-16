@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using SignLanguageSimplification.SimplificationAlgorithm;
 using SignLanguageWebCoreAuth.SimplificationAlgorithm;
 using SignLanguageWebCoreAuth.SimplificationAlgorithm.Interface;
+using Google.Cloud.Vision.V1;
 
 namespace SignLanguageWebCoreAuth.Controllers
 {
@@ -252,6 +253,222 @@ namespace SignLanguageWebCoreAuth.Controllers
             }
 
             return Json(new {images = model.Images});
+
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> TransformFromImage(IFormFile fileImage)
+        {
+            ImagesPageViewModel model = new ImagesPageViewModel();
+            var filePath = configuration["AppSettings:ImagePath"] + "/" + "temp" + ".jpg";
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await fileImage.CopyToAsync(stream);
+            }
+
+            string text = "";
+            var image = Image.FromFile(filePath);
+            var client = ImageAnnotatorClient.Create();
+            var response = client.DetectText(image);
+            foreach (var annotation in response)
+            {
+                if (annotation.Description != null)
+                {
+                    text = annotation.Description;
+                    break;
+                }                    
+            }
+
+            var simplifiedText = Simplify(text);
+            var sentencePart = new List<string>();
+            foreach (KeyValuePair<string, string> entry in simplifiedText)
+            {
+                sentencePart.Add(entry.Key);
+            }
+
+            var finalText = string.Join(" ", sentencePart);
+            text = finalText;
+
+            var words = text.Split(" ");
+            string[] files =
+                Directory.GetFiles(configuration["AppSettings:ImagesPath"], "*.jpg", SearchOption.AllDirectories);
+            _logger.LogInformation("Config {config}", configuration["AppSettings:ImagesPath"]);
+            string webRootPath = _hostingEnvironment.WebRootPath;
+
+            model.Images = new List<ImageMeaningModel>();
+            //int i = 0;
+            for (var i = 0; i < words.Count(); i++)
+            {
+                var word = words[i];
+                if (word.Trim() == "")
+                {
+                    continue;
+                }
+                var flag = 0;
+                if (words.Count() > i + 1)
+                {
+                    var modifiedWord1 = word.Trim() + "-" + words[i + 1];
+                    var fileExists = System.IO.File.Exists(configuration["AppSettings:ImagesPath"] +
+                        configuration["AppSettings:PathSeparator"] + modifiedWord1.Trim().ToLower() + ".jpg");
+
+                    if (fileExists)
+                    {
+                        var file = configuration["AppSettings:ImagesPath"] +
+                        configuration["AppSettings:PathSeparator"] + modifiedWord1.Trim().ToLower() + ".jpg";
+
+                        var idx = file.LastIndexOf(configuration["AppSettings:PathSeparator"]);
+                        _logger.LogInformation("Idx {idx}", idx);
+                        var fileName = file.Substring(idx + 1);
+
+                        System.IO.File.Copy(file.Substring(0, file.LastIndexOf(configuration["AppSettings:PathSeparator"]) + 1) + fileName,
+                            webRootPath + "/images/" + fileName, true);
+                        var imageModel = new ImageMeaningModel();
+                        imageModel.Image = "/images/" + fileName;
+                        imageModel.Meaning = fileName.Split(".")[0];
+                        model.Images.Add(imageModel);
+                        flag = 1;
+                        i += 1;
+                        //break;
+                    }
+                }
+                if (flag != 1)
+                {
+                    if (words.Count() > i + 2)
+                    {
+                        var modifiedWord1 = word.Trim() + "-" + words[i + 1] + "-" + words[i + 2];
+                        var fileExists = System.IO.File.Exists(configuration["AppSettings:ImagesPath"] +
+                            configuration["AppSettings:PathSeparator"] + modifiedWord1.Trim().ToLower() + ".jpg");
+
+
+                        if (fileExists)
+                        {
+                            var file = configuration["AppSettings:ImagesPath"] +
+                            configuration["AppSettings:PathSeparator"] + modifiedWord1.Trim().ToLower() + ".jpg";
+
+                            var idx = file.LastIndexOf(configuration["AppSettings:PathSeparator"]);
+                            _logger.LogInformation("Idx {idx}", idx);
+                            var fileName = file.Substring(idx + 1);
+
+                            if (modifiedWord1.Trim().ToLower() == fileName.Split(".")[0])
+                            {
+                                System.IO.File.Copy(file.Substring(0, file.LastIndexOf(configuration["AppSettings:PathSeparator"]) + 1) + fileName,
+                                    webRootPath + "/images/" + fileName, true);
+                                var imageModel = new ImageMeaningModel();
+                                imageModel.Image = "/images/" + fileName;
+                                imageModel.Meaning = fileName.Split(".")[0];
+                                model.Images.Add(imageModel);
+                                flag = 1;
+                                i += 2;
+                                //break;
+                            }
+                        }
+
+                    }
+                    if (flag != 1)
+                    {
+                        if (System.IO.File.Exists(configuration["AppSettings:ImagesPath"] +
+                        configuration["AppSettings:PathSeparator"] + word.Trim().ToLower() + ".jpg"))
+                        {
+                            var fileBasic = configuration["AppSettings:ImagesPath"] +
+                            configuration["AppSettings:PathSeparator"] + word.Trim().ToLower() + ".jpg";
+
+                            var idx = fileBasic.LastIndexOf(configuration["AppSettings:PathSeparator"]);
+                            _logger.LogInformation("Idx {idx}", idx);
+                            var fileName = fileBasic.Substring(idx + 1);
+
+                            System.IO.File.Copy(fileBasic.Substring(0, fileBasic.LastIndexOf(configuration["AppSettings:PathSeparator"]) + 1) + fileName,
+                                webRootPath + "/images/" + fileName, true);
+                            var imageModel = new ImageMeaningModel();
+                            imageModel.Image = "/images/" + fileName;
+                            imageModel.Meaning = fileName.Split(".")[0];
+                            model.Images.Add(imageModel);
+                            flag = 1;
+                            //break;
+                        }
+
+                        if (flag != 1)
+                        {
+                            var modifiedWord = word.Trim() + "ње";
+                            if (word.EndsWith("и"))
+                            {
+                                modifiedWord = word.TrimEnd('и') + "ење";
+                            }
+
+                            var fileModExists = System.IO.File.Exists(configuration["AppSettings:ImagesPath"] +
+                                configuration["AppSettings:PathSeparator"] + modifiedWord.ToLower() + ".jpg");
+
+                            if (fileModExists)
+                            {
+                                var fileMod = configuration["AppSettings:ImagesPath"] +
+                                configuration["AppSettings:PathSeparator"] + modifiedWord.ToLower() + ".jpg";
+                                var idx = fileMod.LastIndexOf(configuration["AppSettings:PathSeparator"]);
+                                _logger.LogInformation("Idx {idx}", idx);
+                                var fileName = fileMod.Substring(idx + 1);
+
+                                System.IO.File.Copy(fileMod.Substring(0, fileMod.LastIndexOf(configuration["AppSettings:PathSeparator"]) + 1) + fileName,
+                                    webRootPath + "/images/" + fileName, true);
+                                var imageModel = new ImageMeaningModel();
+                                imageModel.Image = "/images/" + fileName;
+                                imageModel.Meaning = fileName.Split(".")[0];
+                                model.Images.Add(imageModel);
+                                flag = 1;
+                                //break;
+                            }
+                            if (flag != 1)
+                            {
+                                if (char.IsUpper(word[0]))
+                                {
+                                    var charArray = word.ToCharArray();
+                                    foreach (var c in charArray)
+                                    {
+                                        System.IO.File.Copy(configuration["AppSettings:ImagesPath"] + configuration["AppSettings:PathSeparator"] + "букви" +
+                                            configuration["AppSettings:PathSeparator"] + char.ToUpper(c) + ".jpg",
+                                        webRootPath + "/images/" + char.ToUpper(c) + ".jpg", true);
+                                        var imageModel = new ImageMeaningModel();
+                                        imageModel.Image = "/images/" + char.ToUpper(c) + ".jpg";
+                                        imageModel.Meaning = char.ToUpper(c).ToString();
+                                        model.Images.Add(imageModel);
+                                        flag = 1;
+                                    }
+                                    //break;
+                                }
+                            }
+
+                        }
+
+                    }
+
+                }
+
+
+                if (flag == 0)
+                {
+                    var imageModel = new ImageMeaningModel();
+                    imageModel.Image = "/images/noimage.jpg";
+                    imageModel.Meaning = word.Trim();
+                    model.Images.Add(imageModel);
+                }
+
+                //i++;
+            }
+
+            if (model.Images.Count == 0)
+            {
+                var imageModel = new ImageMeaningModel();
+                imageModel.Image = "/images/noimage.jpg";
+                imageModel.Image = "нема слика";
+                model.Images = new List<ImageMeaningModel> { imageModel };
+                return Json(new { images = model.Images });
+            }
+
+            if (System.IO.File.Exists(filePath))
+            {
+                // If file found, delete it    
+                System.IO.File.Delete(filePath);
+            }
+
+            return Json(new { images = model.Images });
 
         }
 

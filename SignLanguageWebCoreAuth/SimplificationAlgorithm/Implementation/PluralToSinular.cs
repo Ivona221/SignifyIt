@@ -321,7 +321,11 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                 var sent = string.Join(" ", sentenceBuffer);
                 sent = sent.Replace("   ", " ");
                 sent = sent.Replace("  ", " ");
-                pluralSing.Add(sent, tensePart);
+                if (!pluralSing.ContainsKey(sent))
+                {
+                    pluralSing.Add(sent, tensePart);
+                }
+                
                 //sentenceBuffer[words.Length] = "---->" + tensePart + '\n';
                 //using (System.IO.StreamWriter file =
                 //new System.IO.StreamWriter(@"D:\C#Projects\SignLanguageSimplification\pluralNouns3.txt", true))
