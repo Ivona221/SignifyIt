@@ -198,8 +198,6 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                     {
                         current = current.Trim();
 
-
-
                         string prePrevious = PeekPrevious(sentenceBuffer, i - 1);
                         string previous = PeekPrevious(sentenceBuffer, i);
                         string next = PeekNext(sentenceBuffer, i);
@@ -225,17 +223,18 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                         MatchCollection matches2 = Regex.Matches(current, regexForVerbLForm2);
                         MatchCollection matches3 = Regex.Matches(current, regexForVerbLForm3);
 
+                        //TODO: Fix this
                         if ((previous == "го" || previous == "ја" || previous == "ме" || previous == "те" || previous == "ве" || previous == "ги" || previous == "не") &&
                             (matches1.Count == 1 || matches2.Count == 1 || matches3.Count == 1))
                         {
                             flag = 1;
-                            sent = sent.Replace(previous, "");
+                            //sent = sent.Replace(previous, "");
                             sentTense[sent] = "Минато";
                             break;
                         }
                         if (glagoli.Count >= 1)
                         {
-                            sent.Replace(current, current.Substring(0, current.Length - 3));
+                            //sent.Replace(current, current.Substring(0, current.Length - 3));
                             sentTense[sent] = "Минато";
                             flag = 1;
                             break;
@@ -243,14 +242,14 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
 
                         if (matches1.Count == 1)
                         {
-                            sent = sent.Replace(current, current.Substring(0, current.Length - 1));
+                            //sent = sent.Replace(current, current.Substring(0, current.Length - 1));
                             sentTense[sent] = "Минато";
                             flag = 1;
                             break;
                         }
                         if (matches2.Count == 1 || matches3.Count == 1)
                         {
-                            sent = sent.Replace(current, current.Substring(0, current.Length - 2));
+                            //sent = sent.Replace(current, current.Substring(0, current.Length - 2));
                             sentTense[sent] = "Минато";
                             flag = 1;
                             break;
@@ -278,36 +277,36 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                             if ((current == "сум" || current == "си") && matches11.Count == 1)
                             {
                                 sent = sent.Replace(current, "");
-                                sent = sent.Replace(next, next.Substring(0, next.Length - 1));
+                                //sent = sent.Replace(next, next.Substring(0, next.Length - 1));
                                 if (prePrevious == "ќе")
                                 {
                                     sent = sent.Replace(prePrevious, "");
                                     flag = 1;
-                                    sentTense[sent] = "Минато идно";
+                                    sentTense[sent] = "Минато";
                                     break;
                                 }
                                 else
                                 {
                                     flag = 1;
-                                    sentTense[sent] = "Минато неопределено";
+                                    sentTense[sent] = "Минато";
                                     break;
                                 }
                             }
                             if ((current == "сум" || current == "си") && matches22.Count == 1)
                             {
                                 sent = sent.Replace(current, "");
-                                sent = sent.Replace(next, next.Substring(0, next.Length - 2));
+                                //sent = sent.Replace(next, next.Substring(0, next.Length - 2));
                                 if (prePrevious == "ќе")
                                 {
                                     sent = sent.Replace(prePrevious, "");
                                     flag = 1;
-                                    sentTense[sent] = "Минато идно";
+                                    sentTense[sent] = "Минато";
                                     break;
                                 }
                                 else
                                 {
                                     flag = 1;
-                                    sentTense[sent] = "Минато неопределено";
+                                    sentTense[sent] = "Минато";
                                     break;
                                 }
                             }
@@ -315,25 +314,25 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                             if ((current == "сме" || current == "сте") && matches33.Count == 1)
                             {
                                 sent = sent.Replace(current, "");
-                                sent = sent.Replace(next, next.Substring(0, next.Length - 2));
+                                //sent = sent.Replace(next, next.Substring(0, next.Length - 2));
                                 if (prePrevious == "ќе")
                                 {
                                     sent = sent.Replace(prePrevious, "");
                                     flag = 1;
-                                    sentTense[sent] = "Минато идно";
+                                    sentTense[sent] = "Минато";
                                     break;
                                 }
                                 else
                                 {
                                     flag = 1;
-                                    sentTense[sent] = "Минато неопределено";
+                                    sentTense[sent] = "Минато";
                                     break;
                                 }
                             }
                             if (((current == "бев" || current == "беше") && (matches11.Count == 1)))
                             {
                                 sent = sent.Replace(current, "");
-                                sent = sent.Replace(next, next.Substring(0, next.Length - 1));
+                                //sent = sent.Replace(next, next.Substring(0, next.Length - 1));
                                 flag = 1;
                                 sentTense[sent] = "Минато";
                                 break;
@@ -342,7 +341,7 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                                 || ((current == "бевме" || current == "бевте" || current == "беа") && matches33.Count == 1))
                             {
                                 sent = sent.Replace(current, "");
-                                sent = sent.Replace(next, next.Substring(0, next.Length - 2));
+                                //sent = sent.Replace(next, next.Substring(0, next.Length - 2));
                                 flag = 1;
                                 sentTense[sent] = "Минато";
                                 break;
@@ -375,21 +374,21 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                                 {
                                     if (glagol1.Count == 1 || glagol6.Count == 1)
                                     {
-                                        sent = sent.Replace(next, next.Substring(0, next.Length - 1));
+                                        //sent = sent.Replace(next, next.Substring(0, next.Length - 1));
                                         flag = 1;
                                         sentTense[sent] = "Минато";
                                         break;
                                     }
                                     if (glagol2.Count == 1 || glagol3.Count == 1)
                                     {
-                                        sent = sent.Replace(next, next.Substring(0, next.Length - 2));
+                                        //sent = sent.Replace(next, next.Substring(0, next.Length - 2));
                                         flag = 1;
                                         sentTense[sent] = "Минато";
                                         break;
                                     }
                                     if (glagol4.Count == 1 || glagol5.Count == 1)
                                     {
-                                        sent = sent.Replace(next, next.Substring(0, next.Length - 3));
+                                        //sent = sent.Replace(next, next.Substring(0, next.Length - 3));
                                         flag = 1;
                                         sentTense[sent] = "Минато";
                                         break;
@@ -410,21 +409,21 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                                 sent = sent.Replace(current, "");
                                 if (glagol1.Count == 1 || glagol6.Count == 1)
                                 {
-                                    sent = sent.Replace(next, next.Substring(0, next.Length - 1));
+                                    //sent = sent.Replace(next, next.Substring(0, next.Length - 1));
                                     flag = 1;
                                     sentTense[sent] = "Минато";
                                     break;
                                 }
                                 if (glagol2.Count == 1 || glagol3.Count == 1)
                                 {
-                                    sent = sent.Replace(next, next.Substring(0, next.Length - 2));
+                                    //sent = sent.Replace(next, next.Substring(0, next.Length - 2));
                                     flag = 1;
                                     sentTense[sent] = "Минато";
                                     break;
                                 }
                                 if (glagol4.Count == 1 || glagol5.Count == 1)
                                 {
-                                    sent = sent.Replace(next, next.Substring(0, next.Length - 3));
+                                    //sent = sent.Replace(next, next.Substring(0, next.Length - 3));
                                     flag = 1;
                                     sentTense[sent] = "Минато";
                                     break;

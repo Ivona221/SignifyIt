@@ -40,8 +40,6 @@ namespace SignLanguageWebCoreAuth
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)// optional extra provider
                 .AddEnvironmentVariables();
             
-
-
             Configuration = builder.Build();
         }
 
@@ -95,7 +93,7 @@ namespace SignLanguageWebCoreAuth
             services.AddSingleton<ISentenceSubsplitting, SentenceSubSplitting>();
             services.AddSingleton<ISynonyms, SignLanguageSimplification.SimplificationAlgorithm.Implementation.Synonyms>();
             services.AddSingleton<IPluralToSingular, PluralToSinular>();
-            services.AddSingleton<IPOSTagger, POSTagger>();
+            services.AddSingleton<IPOSTaggerSimplification, POSTaggerSimplification>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

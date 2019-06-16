@@ -25,10 +25,10 @@ namespace SignLanguageWebCoreAuth.Controllers
         private IStopWordsRemoval stopWordsRemoval;
         private IInfinitive infinitive;
         private IPluralToSingular pluralToSingular;
-        private IPOSTagger posTagger;
+        private IPOSTaggerSimplification posTagger;
 
         public SynonymsController(IConfiguration _configuration, ITenseRecognition _tenseRecognition,
-            IStopWordsRemoval _stopWordsRemoval, IInfinitive _infinitive, IPluralToSingular _pluralToSingular, IPOSTagger _posTagger)
+            IStopWordsRemoval _stopWordsRemoval, IInfinitive _infinitive, IPluralToSingular _pluralToSingular, IPOSTaggerSimplification _posTagger)
         {
             configuration = _configuration;
             tenseRecognition = _tenseRecognition;

@@ -30,12 +30,12 @@ namespace SignLanguageWebCoreAuth.Controllers
         private ISentenceSplitting sentenceSplitting;
         private ISentenceSubsplitting sentenceSubsplitting;
         private IPhraseSynonyms phraseSynonyms;
-        private IPOSTagger posTagger;
+        private IPOSTaggerSimplification posTagger;
         private readonly ILogger _logger;
 
         public ImagesController(IHostingEnvironment hostingEnvironment, IConfiguration _configuration, ITenseRecognition _tenseRecognition,
             IStopWordsRemoval _stopWordsRemoval, IInfinitive _infinitive, IPluralToSingular _pluralToSingular,
-            ISentenceSplitting _sentenceSplitting, ISentenceSubsplitting _sentenceSubsplitting, IPhraseSynonyms _phraseSynonyms, IPOSTagger _posTagger,
+            ISentenceSplitting _sentenceSplitting, ISentenceSubsplitting _sentenceSubsplitting, IPhraseSynonyms _phraseSynonyms, IPOSTaggerSimplification _posTagger,
             ILogger<ImagesController> logger)
         {
             _hostingEnvironment = hostingEnvironment;
@@ -74,7 +74,26 @@ namespace SignLanguageWebCoreAuth.Controllers
             var sentencePart = new List<string>();
             foreach(KeyValuePair<string, string> entry in simplifiedText)
             {
-                sentencePart.Add(entry.Key);
+                var tense = "";
+                var splitted = entry.Value.Split().Where(x=>x!="");
+                if (entry.Value == "Минато" && splitted.Count() > 1)
+                {
+                    tense = "минато";
+                }
+                else if(entry.Value == "Идно" && splitted.Count() > 1)
+                {
+                    tense = "иднина";
+                }
+                if (tense != String.Empty)
+                {
+                    sentencePart.Add(entry.Key + " " + tense);
+                }
+                else
+                {
+                    sentencePart.Add(entry.Key);
+                }
+
+
             }
 
             var finalText = string.Join(" ", sentencePart);
