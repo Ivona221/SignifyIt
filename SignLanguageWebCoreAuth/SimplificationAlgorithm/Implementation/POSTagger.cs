@@ -76,6 +76,7 @@ namespace SignLanguageWebCoreAuth.SimplificationAlgorithm.Implementation
             {
                 word = "голем";
             }
+            
             var posKey = new Key("sign-language", "POS", word);
             var posRecord = client.Get(null, posKey);
             if (posRecord != null)
@@ -241,6 +242,16 @@ namespace SignLanguageWebCoreAuth.SimplificationAlgorithm.Implementation
                         }
                     }
                 }
+                //if (word.EndsWith("ка"))
+                //{
+                //    var modifiedWord = word.Substring(0, word.LastIndexOf("ка"));
+                //    var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                //    var posRecordMod = client.Get(null, posKeyMod);
+                //    if (posRecordMod != null)
+                //    {
+                //        return posRecordMod.GetValue("Word").ToString();
+                //    }
+                //}
 
 
             }

@@ -11,16 +11,16 @@
         <textarea placeholder="Внеси текст..." name="insert-text" id="insert-text" cols="20" rows="10" value=""></textarea>
         <input type="button" class="button transform-button" value="Претвори" name="transform" id="transform" />
     </div>
-    <div class="title-wrapper">
-        <h4>Додади слики</h4>
-    </div>
-    <div class="form-wrapper">
-        <div>
-            <label for="fileImage">Слика</label>
-            <input id="image_recognition_file" type="file" name="fileImage">
+    <div class="user-input add-image">
+        <h2 class="title-images">Додади слика</h2>
+        <div class="form-wrapper">
+            <div>
+                <input id="image_recognition_file" type="file" name="fileImage">
+            </div>
+            <input id="upload_image" type="button" class="button upload-btn" value="Претвори">
         </div>
-        <input id="upload_image" type="button" class="button" value="Додади">
     </div>
+    
     <div class="processed-result">
         <div class="slideshow-container"></div>
     </div>
