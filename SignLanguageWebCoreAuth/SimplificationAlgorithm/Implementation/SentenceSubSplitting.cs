@@ -25,6 +25,7 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
 
                 var sentenceArray = new List<string>();
                 var j = 0;
+                splited = splited.Where(x => x.Trim() != "").ToArray();
                 for (int i = 0; i < splited.Length; i++)
                 {
 

@@ -68,8 +68,13 @@ namespace SignLanguageWebCoreAuth.Controllers
         {
             _logger.LogInformation("Getting item {model}", model);
             var text = model.Text;
-
-            var simplifiedText = Simplify(text);
+            var simplifiedText = new Dictionary<string, string>(){{model.Text, ""}};
+            if (model.Text.Trim().ToCharArray().Length > 1)
+            {
+                simplifiedText = Simplify(text);
+            }
+            
+            
             _logger.LogInformation("Simplified text item {simplifiedText}", simplifiedText);
             var sentencePart = new List<string>();
             foreach(KeyValuePair<string, string> entry in simplifiedText)
