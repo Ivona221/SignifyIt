@@ -73,7 +73,46 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                 //{
                 //    tensePart = sentensePlusTense[1];
                 //}
-
+                if(sentencePart.Contains("него го"))
+                {
+                    sentencePart = sentencePart.Replace("него го", "тој");
+                }
+                if (sentencePart.Contains("нему му"))
+                {
+                    sentencePart = sentencePart.Replace("нему му", "тој");
+                }
+                if (sentencePart.Contains("неа ја"))
+                {
+                    sentencePart = sentencePart.Replace("неа ја", "таа");
+                }
+                if (sentencePart.Contains("нејзе и"))
+                {
+                    sentencePart = sentencePart.Replace("нејзе и", "таа");
+                }
+                if (sentencePart.Contains("вас ве"))
+                {
+                    sentencePart = sentencePart.Replace("вас ве", "вие");
+                }
+                if (sentencePart.Contains("вам ви"))
+                {
+                    sentencePart = sentencePart.Replace("вам ви", "вие");
+                }
+                if (sentencePart.Contains("нас ни"))
+                {
+                    sentencePart = sentencePart.Replace("нас ни", "нас");
+                }
+                if (sentencePart.Contains("нив им"))
+                {
+                    sentencePart = sentencePart.Replace("нив им", "тие");
+                }
+                if (sentencePart.Contains("ним им"))
+                {
+                    sentencePart = sentencePart.Replace("ним им", "тие");
+                }
+                if (sentencePart.Contains("нас не"))
+                {
+                    sentencePart = sentencePart.Replace("нас не", "ние");
+                }
                 var words = sentencePart.Split(' ');
                 string[] sentenceBuffer = new string[words.Length+1];
                 words = words.Where(x => x != "").ToArray();

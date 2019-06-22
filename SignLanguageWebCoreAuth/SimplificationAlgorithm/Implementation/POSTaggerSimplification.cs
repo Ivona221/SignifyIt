@@ -80,72 +80,72 @@ namespace SignLanguageWebCoreAuth.SimplificationAlgorithm.Implementation
             }
             else
             {
-                if (word.EndsWith("а"))
-                {
-                    var modifiedWord = word.Substring(0, word.LastIndexOf("а"));
-                    modifiedWord += 'и';
-                    var posKeyMod = new Key("sign-language", "POS", modifiedWord);
-                    var posRecordMod = client.Get(null, posKeyMod);
-                    if (posRecordMod != null)
-                    {
-                        return posRecordMod.GetValue("Word").ToString();
-                    }
-                    else
-                    {
-                        var modifiedWord1 = word.Substring(0, word.LastIndexOf("а"));
-                        modifiedWord1 += 'о';
-                        var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
-                        var posRecordMod1 = client.Get(null, posKeyMod1);
-                        if (posRecordMod1 != null)
-                        {
-                            return posRecordMod1.GetValue("Word").ToString();
-                        }
-                    }
-                }
-                if (word.EndsWith("и"))
-                {
-                    var modifiedWord = word.Substring(0, word.LastIndexOf("и"));
-                    modifiedWord += 'а';
-                    var posKeyMod = new Key("sign-language", "POS", modifiedWord);
-                    var posRecordMod = client.Get(null, posKeyMod);
-                    if (posRecordMod != null)
-                    {
-                        return posRecordMod.GetValue("Word").ToString();
-                    }
-                    else
-                    {
-                        var modifiedWord1 = word.Substring(0, word.LastIndexOf("и"));
+                //if (word.EndsWith("а"))
+                //{
+                //    var modifiedWord = word.Substring(0, word.LastIndexOf("а"));
+                //    modifiedWord += 'и';
+                //    var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                //    var posRecordMod = client.Get(null, posKeyMod);
+                //    if (posRecordMod != null)
+                //    {
+                //        return posRecordMod.GetValue("Word").ToString();
+                //    }
+                //    else
+                //    {
+                //        var modifiedWord1 = word.Substring(0, word.LastIndexOf("а"));
+                //        modifiedWord1 += 'о';
+                //        var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                //        var posRecordMod1 = client.Get(null, posKeyMod1);
+                //        if (posRecordMod1 != null)
+                //        {
+                //            return posRecordMod1.GetValue("Word").ToString();
+                //        }
+                //    }
+                //}
+                //if (word.EndsWith("и"))
+                //{
+                //    var modifiedWord = word.Substring(0, word.LastIndexOf("и"));
+                //    modifiedWord += 'а';
+                //    var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                //    var posRecordMod = client.Get(null, posKeyMod);
+                //    if (posRecordMod != null)
+                //    {
+                //        return posRecordMod.GetValue("Word").ToString();
+                //    }
+                //    else
+                //    {
+                //        var modifiedWord1 = word.Substring(0, word.LastIndexOf("и"));
 
-                        var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
-                        var posRecordMod1 = client.Get(null, posKeyMod1);
-                        if (posRecordMod1 != null)
-                        {
-                            return posRecordMod1.GetValue("Word").ToString();
-                        }
-                        else
-                        {
-                            var modifiedWord2 = word.Substring(0, word.LastIndexOf("и"));
-                            modifiedWord2 += "ја";
-                            var posKeyMod2 = new Key("sign-language", "POS", modifiedWord2);
-                            var posRecordMod2 = client.Get(null, posKeyMod2);
-                            if (posRecordMod2 != null)
-                            {
-                                return posRecordMod2.GetValue("Word").ToString();
-                            }
-                            else
-                            {
-                                var modifiedWord3 = word.Substring(0, word.LastIndexOf("и"));
-                                modifiedWord3 += "ј";
-                                var posKeyMod3 = new Key("sign-language", "POS", modifiedWord3);
-                                var posRecordMod3 = client.Get(null, posKeyMod3);
-                                if (posRecordMod3 != null)
-                                {
-                                    return posRecordMod3.GetValue("Word").ToString();
-                                }
-                            }
-                        }
-                    }
-                }
+                //        var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                //        var posRecordMod1 = client.Get(null, posKeyMod1);
+                //        if (posRecordMod1 != null)
+                //        {
+                //            return posRecordMod1.GetValue("Word").ToString();
+                //        }
+                //        else
+                //        {
+                //            var modifiedWord2 = word.Substring(0, word.LastIndexOf("и"));
+                //            modifiedWord2 += "ја";
+                //            var posKeyMod2 = new Key("sign-language", "POS", modifiedWord2);
+                //            var posRecordMod2 = client.Get(null, posKeyMod2);
+                //            if (posRecordMod2 != null)
+                //            {
+                //                return posRecordMod2.GetValue("Word").ToString();
+                //            }
+                //            else
+                //            {
+                //                var modifiedWord3 = word.Substring(0, word.LastIndexOf("и"));
+                //                modifiedWord3 += "ј";
+                //                var posKeyMod3 = new Key("sign-language", "POS", modifiedWord3);
+                //                var posRecordMod3 = client.Get(null, posKeyMod3);
+                //                if (posRecordMod3 != null)
+                //                {
+                //                    return posRecordMod3.GetValue("Word").ToString();
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
                 if (word.EndsWith("еви"))
                 {
                     var modifiedWord = word.Substring(0, word.LastIndexOf("еви"));

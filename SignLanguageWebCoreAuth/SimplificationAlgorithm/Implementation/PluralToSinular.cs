@@ -136,9 +136,9 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                  "на секој начин", "односно"
             };
 
-            var regexForVerbLForm1 = @"\w*л\b";
-            var regexForVerbLForm2 = @"\w*ла\b";
-            var regexForVerbLForm3 = @"\w*ле\b";
+            //var regexForVerbLForm1 = @"\w*л\b";
+            //var regexForVerbLForm2 = @"\w*ла\b";
+            //var regexForVerbLForm3 = @"\w*ле\b";
 
             var regexForVerbNoun1 = @"\w*ние\b";
             var regexForVerbNoun2 = @"\w*ње\b";
@@ -151,17 +151,22 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
             var regexForPlural3 = @"\w*вци\b";
             var regexForPlural4 = @"\w*иња\b";
             var regexForPlural5 = @"\w*и\b";
+            //за именки од среден род пример села
+            var regexForPlural7 = @"\w*a\b";
+            //збирна множина пример лисја, снопје
+            var regexForPlural8 = @"\w*јa\b";
+            var regexForPlural9 = @"\w*је\b";
 
-            var regexForChlenuvanje = @"\w*от|ов|он|та|ва|на|то|во|но|те|ве|не\b";
+            //var regexForChlenuvanje = @"\w*от|ов|он|та|ва|на|то|во|но|те|ве|не\b";
 
-            var regexForVerbSegashno1 = @"\w*ам\b";
-            var regexForVerbSegashno2 = @"\w*еш\b";
+            //var regexForVerbSegashno1 = @"\w*ам\b";
+            //var regexForVerbSegashno2 = @"\w*еш\b";
 
-            var regexForVerbSegashno3 = @"\w*еме\b";
-            var regexForVerbSegashno4 = @"\w*ете\b";
-            var regexForVerbSegashno5 = @"\w*ат\b";
+            //var regexForVerbSegashno3 = @"\w*еме\b";
+            //var regexForVerbSegashno4 = @"\w*ете\b";
+            //var regexForVerbSegashno5 = @"\w*ат\b";
 
-            var regexForVerbsPlural = @"\w*вме|вте\b";
+            //var regexForVerbsPlural = @"\w*вме|вте\b";
 
             Dictionary<string, string> pluralSing = new Dictionary<string, string>();
             foreach (KeyValuePair<string, string> entry in subsentences)
@@ -209,20 +214,64 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                         MatchCollection glagolskiImenki2 = Regex.Matches(current, regexForVerbNoun2);
                         MatchCollection collectiveNouns1 = Regex.Matches(current, regexForCollectiveNouns1);
                         MatchCollection collectiveNouns2 = Regex.Matches(current, regexForCollectiveNouns2);
-                        MatchCollection chlenvanje = Regex.Matches(current, regexForChlenuvanje);
+                        //MatchCollection chlenvanje = Regex.Matches(current, regexForChlenuvanje);
                         MatchCollection plural1 = Regex.Matches(current, regexForPlural1);
                         MatchCollection plural2 = Regex.Matches(current, regexForPlural2);
                         MatchCollection plural3 = Regex.Matches(current, regexForPlural3);
                         MatchCollection plural4 = Regex.Matches(current, regexForPlural4);
                         MatchCollection plural5 = Regex.Matches(current, regexForPlural5);
-                        MatchCollection glagolSegashno1 = Regex.Matches(current, regexForVerbSegashno1);
-                        MatchCollection glagolSegashno2 = Regex.Matches(current, regexForVerbSegashno2);
-                        MatchCollection glagolSegashno3 = Regex.Matches(current, regexForVerbSegashno3);
-                        MatchCollection glagolSegashno4 = Regex.Matches(current, regexForVerbSegashno4);
-                        MatchCollection glagolSegashno5 = Regex.Matches(current, regexForVerbSegashno5);
-                        MatchCollection glagoli = Regex.Matches(current, regexForVerbsPlural);
-
+                        MatchCollection plural7 = Regex.Matches(current, regexForPlural7);
+                        MatchCollection plural8 = Regex.Matches(current, regexForPlural8);
+                        MatchCollection plural9 = Regex.Matches(current, regexForPlural9);
+                        //MatchCollection glagolSegashno1 = Regex.Matches(current, regexForVerbSegashno1);
+                        //MatchCollection glagolSegashno2 = Regex.Matches(current, regexForVerbSegashno2);
+                        //MatchCollection glagolSegashno3 = Regex.Matches(current, regexForVerbSegashno3);
+                        //MatchCollection glagolSegashno4 = Regex.Matches(current, regexForVerbSegashno4);
+                        //MatchCollection glagolSegashno5 = Regex.Matches(current, regexForVerbSegashno5);
+                        //MatchCollection glagoli = Regex.Matches(current, regexForVerbsPlural);
                         var currentFlag = false;
+                        if (current.Trim() == "ветрови")
+                        {
+                            currentFlag = true;
+                            sentenceBuffer[i] = "ветер" + " " + "множина";
+                        }
+                        if (current.Trim() == "огнови")
+                        {
+                            currentFlag = true;
+                            sentenceBuffer[i] = "оган" + " " + "множина";
+                        }
+                        if (current.Trim() == "браќа")
+                        {
+                            currentFlag = true;
+                            sentenceBuffer[i] = "брат" + " " + "множина";
+                        }                        
+                        if (current.Trim() == "луѓе")
+                        {
+                            currentFlag = true;
+                            sentenceBuffer[i] = "човек" + " " + "множина";
+                        }
+                        if (current.Trim() == "раце")
+                        {
+                            currentFlag = true;
+                            sentenceBuffer[i] = "рака" + " " + "множина";
+                        }
+                        if (current.Trim() == "нозе")
+                        {
+                            currentFlag = true;
+                            sentenceBuffer[i] = "нога" + " " + "множина";
+                        }
+                        if (current.Trim() == "деца")
+                        {
+                            currentFlag = true;
+                            sentenceBuffer[i] = "дете" + " " + "множина";
+                        }
+                        if (current.Trim() == "очи")
+                        {
+                            currentFlag = true;
+                            sentenceBuffer[i] = "око" + " " + "множина";
+                        }
+
+                        
                         if (char.IsUpper(current[0]))
                         {
                             sentenceBuffer[i] = current;
@@ -239,81 +288,84 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                             if (word != null)
                             {
                                 currentFlag = true;
-                                sentenceBuffer[i] = word + " ";
+                                sentenceBuffer[i] = word + " " + "множина";
                             }
 
                         }
 
-                        else if (chlenvanje.Count >= 1)
+                        //else if (chlenvanje.Count >= 1)
+                        //{
+                        //    var word = WriteToDB(current);
+                        //    if (word != null)
+                        //    {
+                        //        currentFlag = true;
+                        //        sentenceBuffer[i] = word + " ";
+                        //    }
+
+                        //}
+
+                        else if (plural1.Count >= 1 || plural2.Count >= 1 || plural3.Count >= 1 || plural4.Count >= 1 ||
+                            plural5.Count >= 1 || plural7.Count >= 1 || plural8.Count >= 1 || plural9.Count >= 1)
                         {
                             var word = WriteToDB(current);
                             if (word != null)
                             {
                                 currentFlag = true;
-                                sentenceBuffer[i] = word + " ";
+                                sentenceBuffer[i] = word + " " + "множина";
+                                
                             }
 
                         }
 
-                        else if (plural1.Count >= 1 || plural2.Count >= 1 || plural3.Count >= 1 || plural4.Count >= 1)
-                        {
-                            var word = WriteToDB(current);
-                            if (word != null)
-                            {
-                                currentFlag = true;
-                                sentenceBuffer[i] = word + " ";
-                            }
+                        //else if ((glagolSegashno1.Count < 1 && glagolSegashno2.Count < 1 && glagolSegashno3.Count < 1 && glagolSegashno3.Count < 1
+                        //    && glagolSegashno4.Count < 1 && glagolSegashno5.Count < 1 && glagoli.Count < 1) && plural5.Count > 1)
+                        //{
+                        //    var word = WriteToDB(next);
+                        //    if (word != null)
+                        //    {
+                        //        currentFlag = true;
+                        //        sentenceBuffer[i + 1] = word + " ";
+                        //    }
 
-                        }
-                        else if ((glagolSegashno1.Count < 1 && glagolSegashno2.Count < 1 && glagolSegashno3.Count < 1 && glagolSegashno3.Count < 1
-                            && glagolSegashno4.Count < 1 && glagolSegashno5.Count < 1 && glagoli.Count < 1) && plural5.Count > 1)
-                        {
-                            var word = WriteToDB(next);
-                            if (word != null)
-                            {
-                                currentFlag = true;
-                                sentenceBuffer[i + 1] = word + " ";
-                            }
-
-                        }
+                        //}
 
                         if (!currentFlag)
                         {
                             sentenceBuffer[i] = w;
                         }
 
-                        var nextFlag = false;
-                        if (next != null)
-                        {
-                            MatchCollection matches1 = Regex.Matches(next, regexForVerbLForm1);
-                            MatchCollection matches2 = Regex.Matches(next, regexForVerbLForm2);
-                            MatchCollection matches3 = Regex.Matches(next, regexForVerbLForm3);
+                        //var nextFlag = false;
+                        //if (next != null)
+                        //{
+                        //    MatchCollection matches1 = Regex.Matches(next, regexForVerbLForm1);
+                        //    MatchCollection matches2 = Regex.Matches(next, regexForVerbLForm2);
+                        //    MatchCollection matches3 = Regex.Matches(next, regexForVerbLForm3);
 
-                            if (predloziImenki.Contains(current) && !predlozi.Contains(next)
-                                && !prilozi.Contains(next) && chestici.Contains(next)
-                                && !zamenki.Contains(next) && !svrznici.Contains(next) && !modalniZborovi.Contains(next))
-                            {
-                                if (char.IsUpper(next[0]))
-                                {
-                                    sentenceBuffer[i] = next;
-                                    //continue;
-                                }
-                                else
-                                {
-                                    var word = WriteToDB(next);
-                                    if (word != null)
-                                    {
-                                        currentFlag = true;
-                                        sentenceBuffer[i + 1] = word + " ";
-                                    }
-                                }                               
-                            }
-                        }
+                        //    if (predloziImenki.Contains(current) && !predlozi.Contains(next)
+                        //        && !prilozi.Contains(next) && chestici.Contains(next)
+                        //        && !zamenki.Contains(next) && !svrznici.Contains(next) && !modalniZborovi.Contains(next))
+                        //    {
+                        //        if (char.IsUpper(next[0]))
+                        //        {
+                        //            sentenceBuffer[i] = next;
+                        //            //continue;
+                        //        }
+                        //        else
+                        //        {
+                        //            var word = WriteToDB(next);
+                        //            if (word != null)
+                        //            {
+                        //                currentFlag = true;
+                        //                sentenceBuffer[i + 1] = word + " ";
+                        //            }
+                        //        }                               
+                        //    }
+                        //}
 
-                        if (nextFlag)
-                        {
-                            i++;
-                        }
+                        //if (nextFlag)
+                        //{
+                        //    i++;
+                        //}
                     }
 
                 }
@@ -392,42 +444,187 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
             //var _client = new MongoClient();
             //var _database = _client.GetDatabase("SignLanguage");
             Policy policy = new Policy();
-            Key key = new Key("sign-language", "Plural", word);
-            Record record = client.Get(policy, key);
-            if (record != null)
+            //Key key = new Key("sign-language", "POS", word);
+            
+            var posKey = new Key("sign-language", "POS", word);
+            var posRecord = client.Get(null, posKey);
+            if (posRecord != null)
             {
-                foreach (KeyValuePair<string, object> entry in record.bins)
+                if(posRecord.GetValue("Type").ToString() != "Глагол")
                 {
-                    if (entry.Key == "Singular")
+                    return posRecord.GetValue("Word").ToString();
+                }
+                return null;
+            }
+            else
+            {
+                if (word.EndsWith("и"))
+                {
+                    var modifiedWord = word.Substring(0, word.LastIndexOf("и"));
+                    modifiedWord += 'а';
+                    var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                    var posRecordMod = client.Get(null, posKeyMod);
+                    if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() != "Глагол")
                     {
-                        return entry.Value.ToString();
+                        return posRecordMod.GetValue("Word").ToString();
+                    }
+                    else
+                    {
+                        var modifiedWord1 = word.Substring(0, word.LastIndexOf("и"));
+
+                        var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                        var posRecordMod1 = client.Get(null, posKeyMod1);
+                        if (posRecordMod1 != null && posRecordMod.GetValue("Type").ToString() != "Глагол")
+                        {
+                            return posRecordMod1.GetValue("Word").ToString();
+                        }
+                        else
+                        {
+                            var modifiedWord2 = word.Substring(0, word.LastIndexOf("и"));
+                            modifiedWord2 += "ја";
+                            var posKeyMod2 = new Key("sign-language", "POS", modifiedWord2);
+                            var posRecordMod2 = client.Get(null, posKeyMod2);
+                            if (posRecordMod2 != null && posRecordMod.GetValue("Type").ToString() != "Глагол")
+                            {
+                                return posRecordMod2.GetValue("Word").ToString();
+                            }
+                            else
+                            {
+                                var modifiedWord3 = word.Substring(0, word.LastIndexOf("и"));
+                                modifiedWord3 += "ј";
+                                var posKeyMod3 = new Key("sign-language", "POS", modifiedWord3);
+                                var posRecordMod3 = client.Get(null, posKeyMod3);
+                                if (posRecordMod3 != null && posRecordMod.GetValue("Type").ToString() != "Глагол")
+                                {
+                                    return posRecordMod3.GetValue("Word").ToString();
+                                }
+                            }
+                        }
+                    }
+                }
+                if (word.EndsWith("вци"))
+                {
+                    var modifiedWord = word.Substring(0, word.LastIndexOf("вци"));
+                    var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                    var posRecordMod = client.Get(null, posKeyMod);
+                    if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() != "Глагол")
+                    {
+                        return posRecordMod.GetValue("Word").ToString();
+                    }
+                }
+                if (word.EndsWith("а"))
+                {
+                    var modifiedWord = word.Substring(0, word.LastIndexOf("а"));
+                    modifiedWord += 'и';
+                    var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                    var posRecordMod = client.Get(null, posKeyMod);
+                    if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() != "Глагол")
+                    {
+                        return posRecordMod.GetValue("Word").ToString();
+                    }
+                    else
+                    {
+                        var modifiedWord1 = word.Substring(0, word.LastIndexOf("а"));
+                        modifiedWord1 += 'о';
+                        var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                        var posRecordMod1 = client.Get(null, posKeyMod1);
+                        if (posRecordMod1 != null && posRecordMod.GetValue("Type").ToString() != "Глагол")
+                        {
+                            return posRecordMod1.GetValue("Word").ToString();
+                        }
+                    }
+                }
+                if (word.EndsWith("иња"))
+                {
+                    var modifiedWord = word.Substring(0, word.LastIndexOf("иња"));
+                    modifiedWord += 'е';
+                    var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                    var posRecordMod = client.Get(null, posKeyMod);
+                    if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() != "Глагол")
+                    {
+                        return posRecordMod.GetValue("Word").ToString();
+                    }
+                }
+                if (word.EndsWith("ишта"))
+                {
+                    var modifiedWord = word.Substring(0, word.LastIndexOf("ишта"));
+                    modifiedWord += 'ј';
+                    var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                    var posRecordMod = client.Get(null, posKeyMod);
+                    if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() != "Глагол")
+                    {
+                        return posRecordMod.GetValue("Word").ToString();
+                    }
+                    else
+                    {
+                        var modifiedWord1 = word.Substring(0, word.LastIndexOf("ишта"));
+                        var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                        var posRecordMod1 = client.Get(null, posKeyMod1);
+                        if (posRecordMod1 != null && posRecordMod.GetValue("Type").ToString() != "Глагол")
+                        {
+                            return posRecordMod1.GetValue("Word").ToString();
+                        }
+                    }
+                }
+                if (word.EndsWith("је"))
+                {
+                    var modifiedWord = word.Substring(0, word.LastIndexOf("је"));
+                    modifiedWord += 'т';
+                    var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                    var posRecordMod = client.Get(null, posKeyMod);
+                    if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() != "Глагол")
+                    {
+                        return posRecordMod.GetValue("Word").ToString();
+                    }
+                    else
+                    {
+                        var modifiedWord1 = word.Substring(0, word.LastIndexOf("је"));
+                        var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                        var posRecordMod1 = client.Get(null, posKeyMod1);
+                        if (posRecordMod1 != null && posRecordMod.GetValue("Type").ToString() != "Глагол")
+                        {
+                            return posRecordMod1.GetValue("Word").ToString();
+                        }
                     }
                 }
 
             }
-            HtmlAgilityPack.HtmlDocument doc = web.Load("http://www.makedonski.info/search/" + word);
-            var h2 = doc.DocumentNode.SelectNodes("//h2[@class='lexem']");
-            if (h2 != null)
-            {
-                var spanText = h2.Descendants("span").First()?.InnerText;
-                if (spanText != null)
-                {
-                    PluralModel plural = new PluralModel()
-                    {
-                        Plural = word,
-                        Singular = spanText
-                    };
-                    WritePolicy policyWrite = new WritePolicy();
-                    policy.SetTimeout(50);  // 50 millisecond timeout.
-                    Key keyWrite = new Key("sign-language", "Plural", word);
-                    Bin binVerb = new Bin("Plural", plural.Plural);
-                    Bin binInf = new Bin("Singular", plural.Singular);
-                    client.Put(policyWrite, keyWrite, binVerb, binInf);
-                    //_collection.InsertOne(plural);
-                    return spanText + " ";
-                }
 
-            }
+            //Record record = client.Get(policy, key);
+            //if (record != null)
+            //{
+            //    foreach (KeyValuePair<string, object> entry in record.bins)
+            //    {
+            //        if (entry.Key == "Singular")
+            //        {
+            //            return entry.Value.ToString();
+            //        }
+            //    }
+
+            //}
+            //HtmlAgilityPack.HtmlDocument doc = web.Load("http://www.makedonski.info/search/" + word);
+            //var h2 = doc.DocumentNode.SelectNodes("//h2[@class='lexem']");
+            //if (h2 != null)
+            //{
+            //    var spanText = h2.Descendants("span").First()?.InnerText;
+            //    if (spanText != null)
+            //    {
+            //        PluralModel plural = new PluralModel()
+            //        {
+            //            Plural = word,
+            //            Singular = spanText
+            //        };
+            //        WritePolicy policyWrite = new WritePolicy();
+            //        policy.SetTimeout(50);  // 50 millisecond timeout.
+            //        Key keyWrite = new Key("sign-language", "Plural", word);
+            //        Bin binVerb = new Bin("Plural", plural.Plural);
+            //        Bin binInf = new Bin("Singular", plural.Singular);
+            //        client.Put(policyWrite, keyWrite, binVerb, binInf);
+            //        //_collection.InsertOne(plural);
+            //        return spanText + " ";
+            //    }
+
+            //}
 
             return null;
         }

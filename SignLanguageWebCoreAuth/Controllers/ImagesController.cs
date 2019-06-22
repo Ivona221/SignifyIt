@@ -247,6 +247,90 @@ namespace SignLanguageWebCoreAuth.Controllers
                                     }
                                     //break;
                                 }
+                                if (flag != 1)
+                                {
+                                    if (word.EndsWith("а"))
+                                    {
+                                        var modifiedWord1 = word.Substring(0, word.LastIndexOf("а"));
+                                        modifiedWord1 += "ува";
+                                        var fileModExists1 = System.IO.File.Exists(configuration["AppSettings:ImagesPath"] +
+                                        configuration["AppSettings:PathSeparator"] + modifiedWord1.ToLower() + ".jpg");
+                                        if (fileModExists1)
+                                        {
+                                            var fileMod = configuration["AppSettings:ImagesPath"] +
+                                            configuration["AppSettings:PathSeparator"] + modifiedWord1.ToLower() + ".jpg";
+                                            var idx = fileMod.LastIndexOf(configuration["AppSettings:PathSeparator"]);
+                                            _logger.LogInformation("Idx {idx}", idx);
+                                            var fileName = fileMod.Substring(idx + 1);
+
+                                            System.IO.File.Copy(fileMod.Substring(0, fileMod.LastIndexOf(configuration["AppSettings:PathSeparator"]) + 1) + fileName,
+                                                webRootPath + "/images/" + fileName, true);
+                                            var imageModel = new ImageMeaningModel();
+                                            imageModel.Image = "/images/" + fileName;
+                                            imageModel.Meaning = fileName.Split(".")[0];
+                                            model.Images.Add(imageModel);
+                                            flag = 1;
+                                            //break;
+                                        }
+
+                                    }
+
+                                    if (flag != 1)
+                                    {
+                                        if (word.EndsWith("и"))
+                                        {
+                                            var modifiedWord1 = word.Substring(0, word.LastIndexOf("и"));
+                                            modifiedWord1 += "ува";
+                                            var fileModExists1 = System.IO.File.Exists(configuration["AppSettings:ImagesPath"] +
+                                            configuration["AppSettings:PathSeparator"] + modifiedWord1.ToLower() + ".jpg");
+                                            if (fileModExists1)
+                                            {
+                                                var fileMod = configuration["AppSettings:ImagesPath"] +
+                                                configuration["AppSettings:PathSeparator"] + modifiedWord1.ToLower() + ".jpg";
+                                                var idx = fileMod.LastIndexOf(configuration["AppSettings:PathSeparator"]);
+                                                _logger.LogInformation("Idx {idx}", idx);
+                                                var fileName = fileMod.Substring(idx + 1);
+
+                                                System.IO.File.Copy(fileMod.Substring(0, fileMod.LastIndexOf(configuration["AppSettings:PathSeparator"]) + 1) + fileName,
+                                                    webRootPath + "/images/" + fileName, true);
+                                                var imageModel = new ImageMeaningModel();
+                                                imageModel.Image = "/images/" + fileName;
+                                                imageModel.Meaning = fileName.Split(".")[0];
+                                                model.Images.Add(imageModel);
+                                                flag = 1;
+                                                //break;
+                                            }
+                                        }
+
+                                        if (flag != 1)
+                                        {
+                                            if (word.EndsWith("е"))
+                                            {
+                                                var modifiedWord1 = word.Substring(0, word.LastIndexOf("е"));
+                                                modifiedWord1 += "ува";
+                                                var fileModExists1 = System.IO.File.Exists(configuration["AppSettings:ImagesPath"] +
+                                                configuration["AppSettings:PathSeparator"] + modifiedWord1.ToLower() + ".jpg");
+                                                if (fileModExists1)
+                                                {
+                                                    var fileMod = configuration["AppSettings:ImagesPath"] +
+                                                    configuration["AppSettings:PathSeparator"] + modifiedWord1.ToLower() + ".jpg";
+                                                    var idx = fileMod.LastIndexOf(configuration["AppSettings:PathSeparator"]);
+                                                    _logger.LogInformation("Idx {idx}", idx);
+                                                    var fileName = fileMod.Substring(idx + 1);
+
+                                                    System.IO.File.Copy(fileMod.Substring(0, fileMod.LastIndexOf(configuration["AppSettings:PathSeparator"]) + 1) + fileName,
+                                                        webRootPath + "/images/" + fileName, true);
+                                                    var imageModel = new ImageMeaningModel();
+                                                    imageModel.Image = "/images/" + fileName;
+                                                    imageModel.Meaning = fileName.Split(".")[0];
+                                                    model.Images.Add(imageModel);
+                                                    flag = 1;
+                                                    //break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                             
                         }
@@ -457,7 +541,93 @@ namespace SignLanguageWebCoreAuth.Controllers
                                     }
                                     //break;
                                 }
+                                if (flag != 1)
+                                {
+                                    if (word.EndsWith("a"))
+                                    {
+                                        var modifiedWord1 = word.Substring(0, word.LastIndexOf("а"));
+                                        modifiedWord1 += "ува";
+                                        var fileModExists1 = System.IO.File.Exists(configuration["AppSettings:ImagesPath"] +
+                                        configuration["AppSettings:PathSeparator"] + modifiedWord1.ToLower() + ".jpg");
+                                        if (fileModExists1)
+                                        {
+                                            var fileMod = configuration["AppSettings:ImagesPath"] +
+                                            configuration["AppSettings:PathSeparator"] + modifiedWord1.ToLower() + ".jpg";
+                                            var idx = fileMod.LastIndexOf(configuration["AppSettings:PathSeparator"]);
+                                            _logger.LogInformation("Idx {idx}", idx);
+                                            var fileName = fileMod.Substring(idx + 1);
+
+                                            System.IO.File.Copy(fileMod.Substring(0, fileMod.LastIndexOf(configuration["AppSettings:PathSeparator"]) + 1) + fileName,
+                                                webRootPath + "/images/" + fileName, true);
+                                            var imageModel = new ImageMeaningModel();
+                                            imageModel.Image = "/images/" + fileName;
+                                            imageModel.Meaning = fileName.Split(".")[0];
+                                            model.Images.Add(imageModel);
+                                            flag = 1;
+                                            //break;
+                                        }
+
+                                    }
+
+                                    if(flag != 1)
+                                    {
+                                        if (word.EndsWith("и"))
+                                        {
+                                            var modifiedWord1 = word.Substring(0, word.LastIndexOf("и"));
+                                            modifiedWord1 += "ува";
+                                            var fileModExists1 = System.IO.File.Exists(configuration["AppSettings:ImagesPath"] +
+                                            configuration["AppSettings:PathSeparator"] + modifiedWord1.ToLower() + ".jpg");
+                                            if (fileModExists1)
+                                            {
+                                                var fileMod = configuration["AppSettings:ImagesPath"] +
+                                                configuration["AppSettings:PathSeparator"] + modifiedWord1.ToLower() + ".jpg";
+                                                var idx = fileMod.LastIndexOf(configuration["AppSettings:PathSeparator"]);
+                                                _logger.LogInformation("Idx {idx}", idx);
+                                                var fileName = fileMod.Substring(idx + 1);
+
+                                                System.IO.File.Copy(fileMod.Substring(0, fileMod.LastIndexOf(configuration["AppSettings:PathSeparator"]) + 1) + fileName,
+                                                    webRootPath + "/images/" + fileName, true);
+                                                var imageModel = new ImageMeaningModel();
+                                                imageModel.Image = "/images/" + fileName;
+                                                imageModel.Meaning = fileName.Split(".")[0];
+                                                model.Images.Add(imageModel);
+                                                flag = 1;
+                                                //break;
+                                            }
+                                        }
+
+                                        if(flag != 1)
+                                        {
+                                            if (word.EndsWith("е"))
+                                            {
+                                                var modifiedWord1 = word.Substring(0, word.LastIndexOf("е"));
+                                                modifiedWord1 += "ува";
+                                                var fileModExists1 = System.IO.File.Exists(configuration["AppSettings:ImagesPath"] +
+                                                configuration["AppSettings:PathSeparator"] + modifiedWord1.ToLower() + ".jpg");
+                                                if (fileModExists1)
+                                                {
+                                                    var fileMod = configuration["AppSettings:ImagesPath"] +
+                                                    configuration["AppSettings:PathSeparator"] + modifiedWord1.ToLower() + ".jpg";
+                                                    var idx = fileMod.LastIndexOf(configuration["AppSettings:PathSeparator"]);
+                                                    _logger.LogInformation("Idx {idx}", idx);
+                                                    var fileName = fileMod.Substring(idx + 1);
+
+                                                    System.IO.File.Copy(fileMod.Substring(0, fileMod.LastIndexOf(configuration["AppSettings:PathSeparator"]) + 1) + fileName,
+                                                        webRootPath + "/images/" + fileName, true);
+                                                    var imageModel = new ImageMeaningModel();
+                                                    imageModel.Image = "/images/" + fileName;
+                                                    imageModel.Meaning = fileName.Split(".")[0];
+                                                    model.Images.Add(imageModel);
+                                                    flag = 1;
+                                                    //break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
+                            
+                                
 
                         }
 

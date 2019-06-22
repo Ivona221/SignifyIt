@@ -137,9 +137,11 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                  "на секој начин", "односно"
             };
 
+
             var regexForVerbLForm1 = @"\w*л\b";
             var regexForVerbLForm2 = @"\w*ла\b";
             var regexForVerbLForm3 = @"\w*ле\b";
+            var regexForVerbLForm4 = @"\w*ло\b";
 
             /*Сегашно време*/
             //Прво лице еднина пр. гледам
@@ -265,6 +267,8 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                         MatchCollection verbLForm1 = Regex.Matches(current, regexForVerbLForm1);
                         MatchCollection verbLForm2 = Regex.Matches(current, regexForVerbLForm2);
                         MatchCollection verbLForm3 = Regex.Matches(current, regexForVerbLForm3);
+                        MatchCollection verbLForm4 = Regex.Matches(current, regexForVerbLForm4);
+
 
                         var currentFlag = false;
                         if (char.IsUpper(current[0]))
@@ -281,7 +285,7 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                                 sentenceBuffer[i] = word;
                             }
                         }
-                        else if (verbsPast2.Count >= 1 || verbsPast4.Count >= 1 || verbsPast5.Count >= 1)
+                        else if (verbsPast1.Count >= 1 || verbsPast2.Count >= 1 || verbsPast3.Count >= 1 || verbsPast4.Count >= 1 || verbsPast5.Count >= 1 || verbsPast6.Count >= 1)
                         {
                             var word = WriteToDB(current);
                             if (word != null)
@@ -291,7 +295,7 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                             }
                         }
                         else if (verbLForm1.Count >= 1 || verbLForm2.Count >= 1 ||
-                            verbLForm3.Count >= 1
+                            verbLForm3.Count >= 1 || verbLForm4.Count >=1
                             )
                         {
                             var word = WriteToDB(current);
@@ -508,73 +512,373 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
             //var _client = new MongoClient();
             //var _database = _client.GetDatabase("SignLanguage");
             Policy policy = new Policy();
-            Key key = new Key("sign-language", "Infinitive", word);
-            Record record = client.Get(policy, key);
-            if (record != null)
+            var posKey = new Key("sign-language", "POS", word);
+            var posRecord = client.Get(null, posKey);
+            if (posRecord != null)
             {
-                foreach (KeyValuePair<string, object> entry in record.bins)
-                {
-                    if (entry.Key == "Infinitive")
-                    {
-                        return entry.Value.ToString();
-                    }
-                }
-
+                return posRecord.GetValue("Word").ToString();
             }
-            else
+
+            if (word.EndsWith("ам"))
             {
-                HtmlAgilityPack.HtmlDocument doc = web.Load("http://www.makedonski.info/search/" + word);
-                var h2 = doc.DocumentNode.SelectNodes("//h2[@class='lexem']");
-
-                if (h2 != null)
+                var modifiedWord = word.Substring(0, word.LastIndexOf("ам"));
+                modifiedWord += 'и';
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null)
                 {
-                    var spanText = h2.Descendants("span").First()?.InnerText;
-                    if (spanText != null)
-                    {
-                        WritePolicy policyWrite = new WritePolicy();
-                        policyWrite.SetTimeout(50);  // 50 millisecond timeout.
-                        InfinitiveModel inf = new InfinitiveModel()
-                        {
-                            Verb = word,
-                            Infinitive = spanText
-                        };
-                        Key keyWrite = new Key("sign-language", "Infinitive", word);
-                        Bin binVerb = new Bin("Verb", inf.Verb);
-                        Bin binInf = new Bin("Infinitive", inf.Infinitive);
-                        client.Put(policyWrite, keyWrite, binVerb, binInf);
-                        //_collection.InsertOne(inf);
-                        return spanText + " ";
-                    }
-
+                    return posRecordMod.GetValue("Word").ToString();
                 }
                 else
                 {
-                    var div = doc.DocumentNode.SelectNodes("//div[@id='word_not_found']");
-                    var div2 = div.Descendants("div").Skip(1).Take(1);
-                    var aWords = div.Descendants("a");
-
-                    foreach (var aWord in aWords)
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("м"));
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null)
                     {
-                        var innerText = aWord.InnerText;
-                        if (word.Contains(innerText))
+                        return posRecordMod1.GetValue("Word").ToString();
+                    }
+                    else
+                    {
+                        var modifiedWord2 = word.Substring(0, word.LastIndexOf("ам"));
+                        modifiedWord += 'е';
+                        var posKeyMod2 = new Key("sign-language", "POS", modifiedWord2);
+                        var posRecordMod2 = client.Get(null, posKeyMod2);
+                        if (posRecordMod2 != null)
                         {
-                            InfinitiveModel inf = new InfinitiveModel()
-                            {
-                                Verb = word,
-                                Infinitive = innerText
-                            };
-                            WritePolicy policyWrite = new WritePolicy();
-                            policyWrite.SetTimeout(50);  // 50 millisecond timeout.
-                            Key keyWrite = new Key("sign-language", "Infinitive", word);
-                            Bin binVerb = new Bin("Verb", inf.Verb);
-                            Bin binInf = new Bin("Infinitive", inf.Infinitive);
-                            client.Put(policyWrite, keyWrite, binVerb, binInf);
-                            //_collection.InsertOne(inf);
-                            return innerText + " ";
+                            return posRecordMod2.GetValue("Word").ToString();
                         }
                     }
                 }
             }
+            if (word.EndsWith("ш"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("ш"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null)
+                {
+                    return posRecordMod.GetValue("Word").ToString();
+                }
+            }
+            if (word.EndsWith("ме"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("ме"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null)
+                {
+                    return posRecordMod.GetValue("Word").ToString();
+                }
+            }
+            if (word.EndsWith("те"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("те"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null)
+                {
+                    return posRecordMod.GetValue("Word").ToString();
+                }
+            }
+            if (word.EndsWith("ат"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("ат"));
+                modifiedWord += "и";
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null)
+                {
+                    return posRecordMod.GetValue("Word").ToString();
+                }
+                else
+                {
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("ат"));
+                    modifiedWord1 += "е";
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null)
+                    {
+                        return posRecordMod1.GetValue("Word").ToString();
+                    }
+                    else
+                    {
+                        var modifiedWord2 = word.Substring(0, word.LastIndexOf("ат"));
+                        var posKeyMod2 = new Key("sign-language", "POS", modifiedWord2);
+                        var posRecordMod2 = client.Get(null, posKeyMod2);
+                        if (posRecordMod2 != null)
+                        {
+                            return posRecordMod2.GetValue("Word").ToString();
+                        }
+                    }
+                }
+            }
+            if (word.EndsWith("ав"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("в"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null)
+                {
+                    return posRecordMod.GetValue("Word").ToString();
+                }
+            }
+            if (word.EndsWith("ев"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("в"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null)
+                {
+                    return posRecordMod.GetValue("Word").ToString();
+                }
+                else
+                {
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("ев"));
+                    modifiedWord1 += "и";
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null)
+                    {
+                        return posRecordMod1.GetValue("Word").ToString();
+                    }
+                }
+            }
+            if (word.EndsWith("ше"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("ше"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null)
+                {
+                    return posRecordMod.GetValue("Word").ToString();
+                }
+                else if(word.EndsWith("еше"))
+                {
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("еше"));
+                    modifiedWord1 += "и";
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null)
+                    {
+                        return posRecordMod1.GetValue("Word").ToString();
+                    }
+                }
+            }
+            if (word.EndsWith("вме"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("вме"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null)
+                {
+                    return posRecordMod.GetValue("Word").ToString();
+                }
+                else if(word.EndsWith("евме"))
+                {
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("евме"));
+                    modifiedWord1 += "и";
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null)
+                    {
+                        return posRecordMod1.GetValue("Word").ToString();
+                    }
+                }
+            }
+            if (word.EndsWith("вте"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("вте"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null)
+                {
+                    return posRecordMod.GetValue("Word").ToString();
+                }
+                else if (word.EndsWith("евте"))
+                {
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("евме"));
+                    modifiedWord1 += "и";
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null)
+                    {
+                        return posRecordMod1.GetValue("Word").ToString();
+                    }
+                }
+            }
+            if (word.EndsWith("а"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("а"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null)
+                {
+                    return posRecordMod.GetValue("Word").ToString();
+                }
+                else if (word.EndsWith("еа"))
+                {
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("еа"));
+                    modifiedWord1 += "и";
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null)
+                    {
+                        return posRecordMod1.GetValue("Word").ToString();
+                    }
+                }
+            }
+            if (word.EndsWith("л"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("л"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null)
+                {
+                    return posRecordMod.GetValue("Word").ToString();
+                }
+                else if (word.EndsWith("ел"))
+                {
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("ел"));
+                    modifiedWord1 += "и";
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null)
+                    {
+                        return posRecordMod1.GetValue("Word").ToString();
+                    }
+                }
+            }
+            if (word.EndsWith("ла"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("ла"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null)
+                {
+                    return posRecordMod.GetValue("Word").ToString();
+                }
+                else if (word.EndsWith("ела"))
+                {
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("ела"));
+                    modifiedWord1 += "и";
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null)
+                    {
+                        return posRecordMod1.GetValue("Word").ToString();
+                    }
+                }
+            }
+            if (word.EndsWith("ло"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("ло"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null)
+                {
+                    return posRecordMod.GetValue("Word").ToString();
+                }
+                else if (word.EndsWith("ело"))
+                {
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("ело"));
+                    modifiedWord1 += "и";
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null)
+                    {
+                        return posRecordMod1.GetValue("Word").ToString();
+                    }
+                }
+            }
+            if (word.EndsWith("ле"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("ле"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null)
+                {
+                    return posRecordMod.GetValue("Word").ToString();
+                }
+                else if (word.EndsWith("еле"))
+                {
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("еле"));
+                    modifiedWord1 += "и";
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null)
+                    {
+                        return posRecordMod1.GetValue("Word").ToString();
+                    }
+                }
+            }
+
+            //Record record = client.Get(policy, key);
+            //if (record != null)
+            //{
+            //    foreach (KeyValuePair<string, object> entry in record.bins)
+            //    {
+            //        if (entry.Key == "Infinitive")
+            //        {
+            //            return entry.Value.ToString();
+            //        }
+            //    }
+
+            //}
+            //else
+            //{
+            //    HtmlAgilityPack.HtmlDocument doc = web.Load("http://www.makedonski.info/search/" + word);
+            //    var h2 = doc.DocumentNode.SelectNodes("//h2[@class='lexem']");
+
+            //    if (h2 != null)
+            //    {
+            //        var spanText = h2.Descendants("span").First()?.InnerText;
+            //        if (spanText != null)
+            //        {
+            //            WritePolicy policyWrite = new WritePolicy();
+            //            policyWrite.SetTimeout(50);  // 50 millisecond timeout.
+            //            InfinitiveModel inf = new InfinitiveModel()
+            //            {
+            //                Verb = word,
+            //                Infinitive = spanText
+            //            };
+            //            Key keyWrite = new Key("sign-language", "Infinitive", word);
+            //            Bin binVerb = new Bin("Verb", inf.Verb);
+            //            Bin binInf = new Bin("Infinitive", inf.Infinitive);
+            //            client.Put(policyWrite, keyWrite, binVerb, binInf);
+            //            //_collection.InsertOne(inf);
+            //            return spanText + " ";
+            //        }
+
+            //    }
+            //    else
+            //    {
+            //        var div = doc.DocumentNode.SelectNodes("//div[@id='word_not_found']");
+            //        var div2 = div.Descendants("div").Skip(1).Take(1);
+            //        var aWords = div.Descendants("a");
+
+            //        foreach (var aWord in aWords)
+            //        {
+            //            var innerText = aWord.InnerText;
+            //            if (word.Contains(innerText))
+            //            {
+            //                InfinitiveModel inf = new InfinitiveModel()
+            //                {
+            //                    Verb = word,
+            //                    Infinitive = innerText
+            //                };
+            //                WritePolicy policyWrite = new WritePolicy();
+            //                policyWrite.SetTimeout(50);  // 50 millisecond timeout.
+            //                Key keyWrite = new Key("sign-language", "Infinitive", word);
+            //                Bin binVerb = new Bin("Verb", inf.Verb);
+            //                Bin binInf = new Bin("Infinitive", inf.Infinitive);
+            //                client.Put(policyWrite, keyWrite, binVerb, binInf);
+            //                //_collection.InsertOne(inf);
+            //                return innerText + " ";
+            //            }
+            //        }
+            //    }
+            //}
             //            Statement statement = new Statement();
             //            statement.
             //            var collection = client.Query(policy, "SELECT * FROM sign-language.Infinitive");
@@ -584,8 +888,8 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
             //            {
             //                return _collection.Find(x => x.Verb == word.Trim()).FirstOrDefault().Infinitive;
             //            }
-           
-            
+
+
 
             return null;
         }
