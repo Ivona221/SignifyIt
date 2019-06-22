@@ -387,6 +387,8 @@ namespace SignLanguageWebCoreAuth.Controllers
                     break;
                 }                    
             }
+            text = text.Replace("o", "о").Replace("j", "ј").Replace("k", "к").Replace("a", "а").Replace("e", "е");
+            text = text.Replace("O", "О").Replace("J", "Ј").Replace("K", "К").Replace("A", "А").Replace("E", "Е");
 
             var simplifiedText = Simplify(text);
             var sentencePart = new List<string>();
