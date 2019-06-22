@@ -368,7 +368,7 @@ namespace SignLanguageWebCoreAuth.Controllers
         public async Task<ActionResult> TransformFromImage(IFormFile fileImage)
         {
             ImagesPageViewModel model = new ImagesPageViewModel();
-            var filePath = configuration["AppSettings:ImagePath"] + "/" + "temp" + ".jpg";
+            var filePath = configuration["AppSettings:ImagesPath"] + "/" + "temp" + ".jpg";
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
