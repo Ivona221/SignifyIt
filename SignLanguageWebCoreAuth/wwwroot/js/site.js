@@ -4,9 +4,7 @@
 // Write your JavaScript code.
 
 $(document).ready(function () {
-    console.log("Script");
     $(".logout").click(function () {
-        console.log("Logout");
         $.ajax({
             url: "/Login/LogOff",
             type: "POST",

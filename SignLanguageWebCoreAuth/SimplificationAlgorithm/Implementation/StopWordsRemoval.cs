@@ -49,7 +49,7 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
 
             var zamenki = new[]
             {
-                "ѝ"
+                "ѝ", ""
             };
 
             var chestici = new[]
@@ -113,6 +113,19 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                 {
                     sentencePart = sentencePart.Replace("нас не", "ние");
                 }
+
+                if (sentencePart.Contains(" ми "))
+                {
+                    sentencePart = sentencePart.Replace(" ми ", " моја ");
+                }
+                if (sentencePart.Contains(" ви "))
+                {
+                    sentencePart = sentencePart.Replace(" ви ", " ваша ");
+                }
+                if (sentencePart.Contains(" ни "))
+                {
+                    sentencePart = sentencePart.Replace(" ни ", " наша ");
+                }
                 var words = sentencePart.Split(' ');
                 string[] sentenceBuffer = new string[words.Length+1];
                 words = words.Where(x => x != "").ToArray();
@@ -141,7 +154,7 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                     }
                     else if (w == "но" || w == "меѓутоа")
                     {
-                        sentenceBuffer[i] = "до" + " ";
+                        sentenceBuffer[i] = "сепак" + " ";
                     }
                     else if (w == "којшто" || w == "коишто")
                     {

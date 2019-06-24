@@ -98,7 +98,8 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                 "себе се", "себе си",
                 "кој", "која", "кое", "кои", "што", "чија", "чие", "чиј",
                 "чии", "сечиј", "нечиј", "ничиј", "некој", "секој", "никој",
-                "оваа", "овој", "ова", "овие", "оној", "онаа", "она", "оние"
+                "оваа", "овој", "ова", "овие", "оној", "онаа", "она", "оние",
+                "ми","им", "ни", "ви", "ве", "му","ме", "те","го","ја", "нè", "ги", "ù"
             };
 
             var zamenkiGlagol = new[]
@@ -450,10 +451,10 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
             var posRecord = client.Get(null, posKey);
             if (posRecord != null)
             {
-                if(posRecord.GetValue("Type").ToString() != "Глагол")
-                {
-                    return posRecord.GetValue("Word").ToString();
-                }
+                //if(posRecord.GetValue("Type").ToString() == "Придавка" || posRecord.GetValue("Type").ToString() == "Именка")
+                //{
+                //    return posRecord.GetValue("Word").ToString();
+                //}
                 return null;
             }
             else
@@ -464,7 +465,7 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                     modifiedWord += 'а';
                     var posKeyMod = new Key("sign-language", "POS", modifiedWord);
                     var posRecordMod = client.Get(null, posKeyMod);
-                    if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() != "Глагол")
+                    if (posRecordMod != null && (posRecordMod.GetValue("Type").ToString() == "Придавка" || posRecordMod.GetValue("Type").ToString() == "Именка"))
                     {
                         return posRecordMod.GetValue("Word").ToString();
                     }
@@ -474,7 +475,7 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
 
                         var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
                         var posRecordMod1 = client.Get(null, posKeyMod1);
-                        if (posRecordMod1 != null && posRecordMod1.GetValue("Type").ToString() != "Глагол")
+                        if (posRecordMod1 != null && (posRecordMod1.GetValue("Type").ToString() == "Придавка" || posRecordMod1.GetValue("Type").ToString() == "Именка"))
                         {
                             return posRecordMod1.GetValue("Word").ToString();
                         }
@@ -484,7 +485,7 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                             modifiedWord2 += "ја";
                             var posKeyMod2 = new Key("sign-language", "POS", modifiedWord2);
                             var posRecordMod2 = client.Get(null, posKeyMod2);
-                            if (posRecordMod2 != null && posRecordMod2.GetValue("Type").ToString() != "Глагол")
+                            if (posRecordMod2 != null && (posRecordMod2.GetValue("Type").ToString() == "Придавка" || posRecordMod2.GetValue("Type").ToString() == "Именка"))
                             {
                                 return posRecordMod2.GetValue("Word").ToString();
                             }
@@ -494,7 +495,7 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                                 modifiedWord3 += "ј";
                                 var posKeyMod3 = new Key("sign-language", "POS", modifiedWord3);
                                 var posRecordMod3 = client.Get(null, posKeyMod3);
-                                if (posRecordMod3 != null && posRecordMod3.GetValue("Type").ToString() != "Глагол")
+                                if (posRecordMod3 != null && (posRecordMod3.GetValue("Type").ToString() == "Придавка" || posRecordMod3.GetValue("Type").ToString() == "Именка"))
                                 {
                                     return posRecordMod3.GetValue("Word").ToString();
                                 }
@@ -507,7 +508,7 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                     var modifiedWord = word.Substring(0, word.LastIndexOf("вци"));
                     var posKeyMod = new Key("sign-language", "POS", modifiedWord);
                     var posRecordMod = client.Get(null, posKeyMod);
-                    if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() != "Глагол")
+                    if (posRecordMod != null && (posRecordMod.GetValue("Type").ToString() == "Придавка" || posRecordMod.GetValue("Type").ToString() == "Именка"))
                     {
                         return posRecordMod.GetValue("Word").ToString();
                     }
@@ -518,7 +519,7 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                     modifiedWord += 'и';
                     var posKeyMod = new Key("sign-language", "POS", modifiedWord);
                     var posRecordMod = client.Get(null, posKeyMod);
-                    if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() != "Глагол")
+                    if (posRecordMod != null && (posRecordMod.GetValue("Type").ToString() == "Придавка" || posRecordMod.GetValue("Type").ToString() == "Именка"))
                     {
                         return posRecordMod.GetValue("Word").ToString();
                     }
@@ -528,7 +529,7 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                         modifiedWord1 += 'о';
                         var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
                         var posRecordMod1 = client.Get(null, posKeyMod1);
-                        if (posRecordMod1 != null && posRecordMod1.GetValue("Type").ToString() != "Глагол")
+                        if (posRecordMod1 != null && (posRecordMod1.GetValue("Type").ToString() == "Придавка" || posRecordMod1.GetValue("Type").ToString() == "Именка"))
                         {
                             return posRecordMod1.GetValue("Word").ToString();
                         }
@@ -540,7 +541,7 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                     modifiedWord += 'е';
                     var posKeyMod = new Key("sign-language", "POS", modifiedWord);
                     var posRecordMod = client.Get(null, posKeyMod);
-                    if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() != "Глагол")
+                    if (posRecordMod != null && (posRecordMod.GetValue("Type").ToString() == "Придавка" || posRecordMod.GetValue("Type").ToString() == "Именка"))
                     {
                         return posRecordMod.GetValue("Word").ToString();
                     }
@@ -551,7 +552,7 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                     modifiedWord += 'ј';
                     var posKeyMod = new Key("sign-language", "POS", modifiedWord);
                     var posRecordMod = client.Get(null, posKeyMod);
-                    if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() != "Глагол")
+                    if (posRecordMod != null && (posRecordMod.GetValue("Type").ToString() == "Придавка" || posRecordMod.GetValue("Type").ToString() == "Именка"))
                     {
                         return posRecordMod.GetValue("Word").ToString();
                     }
@@ -560,7 +561,7 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                         var modifiedWord1 = word.Substring(0, word.LastIndexOf("ишта"));
                         var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
                         var posRecordMod1 = client.Get(null, posKeyMod1);
-                        if (posRecordMod1 != null && posRecordMod1.GetValue("Type").ToString() != "Глагол")
+                        if (posRecordMod1 != null && (posRecordMod1.GetValue("Type").ToString() == "Придавка" || posRecordMod1.GetValue("Type").ToString() == "Именка"))
                         {
                             return posRecordMod1.GetValue("Word").ToString();
                         }
@@ -572,7 +573,7 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                     modifiedWord += 'т';
                     var posKeyMod = new Key("sign-language", "POS", modifiedWord);
                     var posRecordMod = client.Get(null, posKeyMod);
-                    if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() != "Глагол")
+                    if (posRecordMod != null && (posRecordMod.GetValue("Type").ToString() == "Придавка" || posRecordMod.GetValue("Type").ToString() == "Именка"))
                     {
                         return posRecordMod.GetValue("Word").ToString();
                     }
@@ -581,7 +582,7 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                         var modifiedWord1 = word.Substring(0, word.LastIndexOf("је"));
                         var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
                         var posRecordMod1 = client.Get(null, posKeyMod1);
-                        if (posRecordMod1 != null && posRecordMod1.GetValue("Type").ToString() != "Глагол")
+                        if (posRecordMod1 != null && (posRecordMod1.GetValue("Type").ToString() == "Придавка" || posRecordMod1.GetValue("Type").ToString() == "Именка"))
                         {
                             return posRecordMod1.GetValue("Word").ToString();
                         }

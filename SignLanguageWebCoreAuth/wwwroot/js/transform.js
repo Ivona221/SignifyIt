@@ -14,7 +14,6 @@
             data: JSON.stringify(model),
             contentType: "application/json; charset=utf-8",
         }).done(function (res) {
-	        console.log(res.images);
 	        $(".slideshow-container").html("");
             //var redirectUrl = res.redirectUrl;
             //window.location.href = redirectUrl;
@@ -54,7 +53,6 @@
             contentType: false,
             processData: false
         }).done(function (res) {
-            console.log(res.images);
             $(".slideshow-container").html("");
             //var redirectUrl = res.redirectUrl;
             //window.location.href = redirectUrl;

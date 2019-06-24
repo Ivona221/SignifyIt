@@ -80,7 +80,7 @@ namespace SignLanguageWebCoreAuth.Controllers
             foreach(KeyValuePair<string, string> entry in simplifiedText)
             {
                 var tense = "";
-                var splitted = entry.Value.Split().Where(x=>x!="");
+                var splitted = entry.Key.Split().Where(x=>x!="");
                 if (entry.Value == "Минато" && splitted.Count() > 1)
                 {
                     tense = "минато";
@@ -150,15 +150,20 @@ namespace SignLanguageWebCoreAuth.Controllers
                 {
                     if (words.Count() > i + 2)
                     {
+                        var path = "";
                         var modifiedWord1 = word.Trim() + "-" + words[i + 1] + "-" + words[i + 2];
                         var fileExists = System.IO.File.Exists(configuration["AppSettings:ImagesPath"] +
                             configuration["AppSettings:PathSeparator"] + modifiedWord1.Trim().ToLower() + ".jpg");
-
+                        if (fileExists)
+                        {
+                            path = configuration["AppSettings:ImagesPath"] +
+                            configuration["AppSettings:PathSeparator"] + modifiedWord1.Trim().ToLower() + ".jpg";
+                        }
+                        
 
                         if (fileExists)
                         {
-                            var file = configuration["AppSettings:ImagesPath"] +
-                            configuration["AppSettings:PathSeparator"] + modifiedWord1.Trim().ToLower() + ".jpg";
+                            var file = path;
 
                             var idx = file.LastIndexOf(configuration["AppSettings:PathSeparator"]);
                             _logger.LogInformation("Idx {idx}", idx);
@@ -181,11 +186,24 @@ namespace SignLanguageWebCoreAuth.Controllers
                     }
                     if(flag != 1)
                     {
-                        if (System.IO.File.Exists(configuration["AppSettings:ImagesPath"] +
-                        configuration["AppSettings:PathSeparator"] + word.Trim().ToLower() + ".jpg"))
+                        var path = "";
+                        var fileExists = System.IO.File.Exists(configuration["AppSettings:ImagesPath"] +
+                        configuration["AppSettings:PathSeparator"] + word.Trim().ToLower() + ".jpg");
+                        if (fileExists)
                         {
-                            var fileBasic = configuration["AppSettings:ImagesPath"] +
+                            path = configuration["AppSettings:ImagesPath"] +
                             configuration["AppSettings:PathSeparator"] + word.Trim().ToLower() + ".jpg";
+                        }
+                        var fileExistsNumber = System.IO.File.Exists(configuration["AppSettings:ImagesPath"] +
+                                                configuration["AppSettings:PathSeparator"] + "бројки"+ configuration["AppSettings:PathSeparator"] + word.Trim().ToLower() + ".jpg");
+                        if (fileExistsNumber)
+                        {
+                            path = configuration["AppSettings:ImagesPath"] +
+                                configuration["AppSettings:PathSeparator"] + "бројки" + configuration["AppSettings:PathSeparator"] + word.Trim().ToLower() + ".jpg";
+                        }               
+                        if (fileExists || fileExistsNumber)
+                        {
+                            var fileBasic = path;
 
                             var idx = fileBasic.LastIndexOf(configuration["AppSettings:PathSeparator"]);
                             _logger.LogInformation("Idx {idx}", idx);
@@ -211,6 +229,7 @@ namespace SignLanguageWebCoreAuth.Controllers
 
                             var fileModExists = System.IO.File.Exists(configuration["AppSettings:ImagesPath"] +
                                 configuration["AppSettings:PathSeparator"] + modifiedWord.ToLower() + ".jpg");
+
 
                             if (fileModExists)
                             {

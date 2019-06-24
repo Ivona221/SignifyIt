@@ -4,12 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Aerospike.Client;
+using Microsoft.Extensions.Configuration;
 using SignLanguageWebCoreAuth.SimplificationAlgorithm.Interface;
 
 namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
 {
     class TenseRecognition : ITenseRecognition
     {
+        private readonly IConfiguration configuration;
+        public TenseRecognition(IConfiguration _configuration)
+        {
+            configuration = _configuration;
+        }
         public Dictionary<string, string> TagSents(List<string> subsentences)
         {
             //string sentences = System.IO.File.ReadAllText(@"D:\C#Projects\SignLanguageSimplification\sentenceSubSplit.txt");
@@ -232,32 +239,23 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                             sentTense[sent] = "Минато";
                             break;
                         }
-                        if (glagoli.Count >= 1)
+                        if(current.EndsWith("ав") || current.EndsWith("ев") || current.EndsWith("ше") || current.EndsWith("вме") 
+                            || current.EndsWith("вте") || current.EndsWith("а") || current.EndsWith("л") || current.EndsWith("ла") 
+                            || current.EndsWith("ло") || current.EndsWith("ле"))
                         {
-                            //sent.Replace(current, current.Substring(0, current.Length - 3));
-                            sentTense[sent] = "Минато";
-                            flag = 1;
-                            break;
-                        }
-
-                        if (matches1.Count == 1)
-                        {
-                            //sent = sent.Replace(current, current.Substring(0, current.Length - 1));
-                            sentTense[sent] = "Минато";
-                            flag = 1;
-                            break;
-                        }
-                        if (matches2.Count == 1 || matches3.Count == 1)
-                        {
-                            //sent = sent.Replace(current, current.Substring(0, current.Length - 2));
-                            sentTense[sent] = "Минато";
-                            flag = 1;
-                            break;
+                            var type = WriteToDB(current);
+                            if(type != null)
+                            {
+                                sentTense[sent] = type;
+                                flag = 1;
+                                break;
+                            }
                         }
 
                         if (glagolSegashno1.Count == 1 || glagolSegashno2.Count == 1 || glagolSegashno3.Count == 1 || glagolSegashno3.Count == 1
                             || glagolSegashno4.Count == 1 || glagolSegashno5.Count == 1)
                         {
+
                             sentTense[sent] = "Сегашно";
                             flag = 1;
                             break;
@@ -375,28 +373,51 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                                     if (glagol1.Count == 1 || glagol6.Count == 1)
                                     {
                                         //sent = sent.Replace(next, next.Substring(0, next.Length - 1));
-                                        flag = 1;
-                                        sentTense[sent] = "Минато";
+                                        
+                                        var type = WriteToDB(next);
+                                        if(type != null)
+                                        {
+                                            flag = 1;
+                                            sentTense[sent] = type;
+                                            
+                                        }
                                         break;
                                     }
                                     if (glagol2.Count == 1 || glagol3.Count == 1)
                                     {
                                         //sent = sent.Replace(next, next.Substring(0, next.Length - 2));
-                                        flag = 1;
-                                        sentTense[sent] = "Минато";
+                                        
+                                        var type = WriteToDB(next);
+                                        if (type != null)
+                                        {
+                                            flag = 1;
+                                            sentTense[sent] = type;
+
+                                        }
                                         break;
                                     }
                                     if (glagol4.Count == 1 || glagol5.Count == 1)
                                     {
                                         //sent = sent.Replace(next, next.Substring(0, next.Length - 3));
-                                        flag = 1;
-                                        sentTense[sent] = "Минато";
+                                        
+                                        var type = WriteToDB(next);
+                                        if (type != null)
+                                        {
+                                            flag = 1;
+                                            sentTense[sent] = type;
+
+                                        }
                                         break;
                                     }
                                     else
                                     {
-                                        flag = 1;
-                                        sentTense[sent] = "Сегашно";
+                                        var type = WriteToDB(next);
+                                        if (type != null)
+                                        {
+                                            flag = 1;
+                                            sentTense[sent] = type;
+
+                                        }
                                         break;
                                     }
 
@@ -410,28 +431,48 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                                 if (glagol1.Count == 1 || glagol6.Count == 1)
                                 {
                                     //sent = sent.Replace(next, next.Substring(0, next.Length - 1));
-                                    flag = 1;
-                                    sentTense[sent] = "Минато";
+                                    var type = WriteToDB(next);
+                                    if (type != null)
+                                    {
+                                        flag = 1;
+                                        sentTense[sent] = type;
+
+                                    }
                                     break;
                                 }
                                 if (glagol2.Count == 1 || glagol3.Count == 1)
                                 {
                                     //sent = sent.Replace(next, next.Substring(0, next.Length - 2));
-                                    flag = 1;
-                                    sentTense[sent] = "Минато";
+                                    var type = WriteToDB(next);
+                                    if (type != null)
+                                    {
+                                        flag = 1;
+                                        sentTense[sent] = type;
+
+                                    }
                                     break;
                                 }
                                 if (glagol4.Count == 1 || glagol5.Count == 1)
                                 {
                                     //sent = sent.Replace(next, next.Substring(0, next.Length - 3));
-                                    flag = 1;
-                                    sentTense[sent] = "Минато";
+                                    var type = WriteToDB(next);
+                                    if (type != null)
+                                    {
+                                        flag = 1;
+                                        sentTense[sent] = type;
+
+                                    }
                                     break;
                                 }
                                 else
                                 {
-                                    flag = 1;
-                                    sentTense[sent] = "Сегашно";
+                                    var type = WriteToDB(next);
+                                    if (type != null)
+                                    {
+                                        flag = 1;
+                                        sentTense[sent] = type;
+
+                                    }
                                     break;
                                 }
                             }
@@ -458,6 +499,312 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
             //    }
 
             //}
+        }
+
+        private string WriteToDB(string word)
+        {
+
+            AerospikeClient client = new AerospikeClient(configuration["AppSettings:AerospikeClient"], 3000);
+            //var _client = new MongoClient();
+            //var _database = _client.GetDatabase("SignLanguage");
+            Policy policy = new Policy();
+
+            if (word.EndsWith("ам"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("ам"));
+                modifiedWord += 'и';
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() == "Глагол")
+                {
+                    return "Сегашно";
+                }
+                else
+                {
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("ам"));
+                    modifiedWord1 += 'е';
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null && posRecordMod1.GetValue("Type").ToString() == "Глагол")
+                    {
+                        return "Сегашно";
+                    }
+                    else
+                    {
+                        var modifiedWord2 = word.Substring(0, word.LastIndexOf("м"));
+                        var posKeyMod2 = new Key("sign-language", "POS", modifiedWord2);
+                        var posRecordMod2 = client.Get(null, posKeyMod2);
+                        if (posRecordMod2 != null && posRecordMod2.GetValue("Type").ToString() == "Глагол")
+                        {
+                            return "Сегашно";
+                        }
+                    }
+                }
+            }
+            if (word.EndsWith("ш"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("ш"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() == "Глагол")
+                {
+                    return "Сегашно";
+                }
+            }
+            if (word.EndsWith("ме"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("ме"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() == "Глагол")
+                {
+                    return "Сегашно";
+                }
+            }
+            if (word.EndsWith("те"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("те"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() == "Глагол")
+                {
+                    return "Сегашно";
+                }
+            }
+            if (word.EndsWith("ат"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("ат"));
+                modifiedWord += "и";
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() == "Глагол")
+                {
+                    return "Сегашно";
+                }
+                else
+                {
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("ат"));
+                    modifiedWord1 += "е";
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null && posRecordMod1.GetValue("Type").ToString() == "Глагол")
+                    {
+                        return "Сегашно";
+                    }
+                    else
+                    {
+                        var modifiedWord2 = word.Substring(0, word.LastIndexOf("ат"));
+                        var posKeyMod2 = new Key("sign-language", "POS", modifiedWord2);
+                        var posRecordMod2 = client.Get(null, posKeyMod2);
+                        if (posRecordMod2 != null && posRecordMod2.GetValue("Type").ToString() == "Глагол")
+                        {
+                            return "Сегашно";
+                        }
+                    }
+                }
+            }
+            if (word.EndsWith("ав"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("в"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() == "Глагол")
+                {
+                    return "Минато";
+                }
+            }
+            if (word.EndsWith("ев"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("в"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() == "Глагол")
+                {
+                    return "Минато";
+                }
+                else
+                {
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("ев"));
+                    modifiedWord1 += "и";
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null && posRecordMod1.GetValue("Type").ToString() == "Глагол")
+                    {
+                        return "Минато";
+                    }
+                }
+            }
+            if (word.EndsWith("ше"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("ше"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() == "Глагол")
+                {
+                    return "Минато";
+                }
+                else if (word.EndsWith("еше"))
+                {
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("еше"));
+                    modifiedWord1 += "и";
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null && posRecordMod1.GetValue("Type").ToString() == "Глагол")
+                    {
+                        return "Минато";
+                    }
+                }
+            }
+            if (word.EndsWith("вме"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("вме"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() == "Глагол")
+                {
+                    return "Минато";
+                }
+                else if (word.EndsWith("евме"))
+                {
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("евме"));
+                    modifiedWord1 += "и";
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null && posRecordMod1.GetValue("Type").ToString() == "Глагол")
+                    {
+                        return "Минато";
+                    }
+                }
+            }
+            if (word.EndsWith("вте"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("вте"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() == "Глагол")
+                {
+                    return "Минато";
+                }
+                else if (word.EndsWith("евте"))
+                {
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("евме"));
+                    modifiedWord1 += "и";
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null && posRecordMod1.GetValue("Type").ToString() == "Глагол")
+                    {
+                        return "Минато";
+                    }
+                }
+            }
+            if (word.EndsWith("а"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("а"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() == "Глагол")
+                {
+                    return "Минато";
+                }
+                else if (word.EndsWith("еа"))
+                {
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("еа"));
+                    modifiedWord1 += "и";
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null && posRecordMod1.GetValue("Type").ToString() == "Глагол")
+                    {
+                        return "Минато";
+                    }
+                }
+            }
+            if (word.EndsWith("л"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("л"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() == "Глагол")
+                {
+                    return "Минато";
+                }
+                else if (word.EndsWith("ел"))
+                {
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("ел"));
+                    modifiedWord1 += "и";
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null && posRecordMod1.GetValue("Type").ToString() == "Глагол")
+                    {
+                        return "Минато";
+                    }
+                }
+            }
+            if (word.EndsWith("ла"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("ла"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() == "Глагол")
+                {
+                    return "Минато";
+                }
+                else if (word.EndsWith("ела"))
+                {
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("ела"));
+                    modifiedWord1 += "и";
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null && posRecordMod1.GetValue("Type").ToString() == "Глагол")
+                    {
+                        return "Минато";
+                    }
+                }
+            }
+            if (word.EndsWith("ло"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("ло"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() == "Глагол")
+                {
+                    return "Минато";
+                }
+                else if (word.EndsWith("ело"))
+                {
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("ело"));
+                    modifiedWord1 += "и";
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null && posRecordMod1.GetValue("Type").ToString() == "Глагол")
+                    {
+                        return "Минато";
+                    }
+                }
+            }
+            if (word.EndsWith("ле"))
+            {
+                var modifiedWord = word.Substring(0, word.LastIndexOf("ле"));
+                var posKeyMod = new Key("sign-language", "POS", modifiedWord);
+                var posRecordMod = client.Get(null, posKeyMod);
+                if (posRecordMod != null && posRecordMod.GetValue("Type").ToString() == "Глагол")
+                {
+                    return "Минато";
+                }
+                else if (word.EndsWith("еле"))
+                {
+                    var modifiedWord1 = word.Substring(0, word.LastIndexOf("еле"));
+                    modifiedWord1 += "и";
+                    var posKeyMod1 = new Key("sign-language", "POS", modifiedWord1);
+                    var posRecordMod1 = client.Get(null, posKeyMod1);
+                    if (posRecordMod1 != null && posRecordMod1.GetValue("Type").ToString() == "Глагол")
+                    {
+                        return "Минато";
+                    }
+                }
+            }
+
+            return null;
+
         }
 
         private string PeekNext(string[] content, int index)
@@ -494,5 +841,7 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                 return false;
             }
         }
+
+
     }
 }
