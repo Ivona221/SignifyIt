@@ -271,11 +271,17 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
 
 
                         var currentFlag = false;
+                       
                         if (char.IsUpper(current[0]))
                         {
                             sentenceBuffer[i] = current;
                         }
-                        if (verbsPresent1.Count == 1 || verbsPresent2.Count == 1 || verbsPresent3.Count == 1 || verbsPresent4.Count == 1
+                        if (current == "беше" || current == "бил" || current == "бев")
+                        {
+                            sentenceBuffer[i] = "е";
+                            currentFlag = true;
+                        }
+                        else if (verbsPresent1.Count == 1 || verbsPresent2.Count == 1 || verbsPresent3.Count == 1 || verbsPresent4.Count == 1
                            || verbsPresent5.Count == 1)
                         {
                             var word = WriteToDB(current);

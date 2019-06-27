@@ -126,6 +126,10 @@ namespace SignLanguageSimplification.SimplificationAlgorithm.Implementation
                 {
                     sentencePart = sentencePart.Replace(" ни ", " наша ");
                 }
+                if (sentencePart.Contains(" му "))
+                {
+                    sentencePart = sentencePart.Replace(" му ", " тој ");
+                }
                 var words = sentencePart.Split(' ');
                 string[] sentenceBuffer = new string[words.Length+1];
                 words = words.Where(x => x != "").ToArray();

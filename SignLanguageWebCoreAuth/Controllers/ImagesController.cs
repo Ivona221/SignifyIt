@@ -397,7 +397,9 @@ namespace SignLanguageWebCoreAuth.Controllers
             string text = "";
             var image = Image.FromFile(filePath);
             var client = ImageAnnotatorClient.Create();
-            var response = client.DetectText(image);
+            ImageContext imageContext = new ImageContext();
+            imageContext.LanguageHints.Add("mk");
+            var response = client.DetectText(image, imageContext);
             foreach (var annotation in response)
             {
                 if (annotation.Description != null)
